@@ -24,11 +24,8 @@ export default class EnteranceContent extends Component {
       });
 
     if (getAuthToken()) {
-      // Use Link to navigate instead of window.location.href
-      // Adjust the path and any necessary props accordingly
       window.location.href='/main';
-      // or if you need to pass data:
-      // <Link to={{ pathname: '/main', state: { data: this.state.data }}}>Main</Link>
+      // to pass data --> <Link to={{ pathname: '/main', state: { data: this.state.data }}}>Main</Link>
     }
   }
 

@@ -59,48 +59,6 @@ export default class MainPage extends React.Component {
     }
   }
 
-  // componentDidMount() {
-  //   let isPassed = false;
-  //   if(this.state.userProductsData != []){ // değişebilir
-  //     isPassed = true;
-  //     const decoded = jwt.decode(getAuthToken());
-  //     request('POST', '/auth/getUserId', decoded.sub)
-  //       .then((response) => {
-  //         this.setState({ 
-  //           passedUserId: response.data
-  //         });
-  //       })
-  //       .catch((error) => {
-  //         if (error.response.status === 401) {
-  //           setAuthHeader(null);
-  //         } else {
-  //           this.setState({ data: error.response.code });
-  //         }
-  //     });
-  //   }
-  //   request('GET', '/products/listAll', {} /* <- it can be null */) // fetches the products from the backend
-  //     .then((response) => {
-  //       if(!isPassed){
-  //         this.setState({ 
-  //           data: response.data,
-  //           userProductsData: response.data.filter(product => product.ownerId === this.state.userId) // Bunun yerine kullanıcıya ait ürünleri backendden ayrı bir path ile ve tekrardan frontendden ayrı bir request ile isteyip de tanımlayabiliriz
-  //         });
-  //       }else{
-  //         this.setState({ 
-  //           data: response.data,
-  //           userProductsData: response.data.filter(product => product.ownerId === this.state.passedUserId) // Bunun yerine kullanıcıya ait ürünleri backendden ayrı bir path ile ve tekrardan frontendden ayrı bir request ile isteyip de tanımlayabiliriz
-  //         });
-  //       }
-  //     })
-  //     .catch((error) => {
-  //       if (error.response.status === 401) {
-  //         setAuthHeader(null);
-  //       } else {
-  //         this.setState({ data: error.response.code });
-  //       }
-  //   });
-  // }
-
   edit = (product) => {
     if(this.state.editingProductId && this.state.editingProductId === product.id){
       this.setState({editingProductId: null});

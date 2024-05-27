@@ -24,7 +24,7 @@ function AddProductPanel(props) {
 
   const onChange = (e) => { // e değeri input etiketine özel olarak direk doldurulduğu için onChange şeklinde kullanılır
     const { name, value } = e.target;
-    if(isNaN(value) && name === 'price'){ // virgülde de hata veriyor ama şimdilik sıkıntı değil
+    if(isNaN(value) && name === 'price'){ // virgülde de hata veriyor
       alert("Please enter a number in price")
     }else{
       setDataToAdd((prevData) => ({
