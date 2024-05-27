@@ -199,13 +199,13 @@ export default class MainPage extends React.Component {
                 <table  className='table table-light'>
                   <thead>
                     <tr>
+                      <th>Brand</th>
                       <th>Name</th>
                       {/* <th>Description</th> */}
                       <th>Color</th>
                       <th>Information</th>
                       <th>Price</th>
                       {/* <th>Owner ID</th> */}
-                      <th>Brand</th>
                       <th>Edit</th>
                     </tr>
                   </thead>
@@ -213,13 +213,13 @@ export default class MainPage extends React.Component {
                     {this.state.userProductsData.map((product) => ( 
                       <React.Fragment key={product.id}>
                         <tr className={this.state.editingProductId === product.id ? 'table-dark' : ''}>
+                          <td onClick={() => this.show(product)}>{product.brand}</td>
                           <td onClick={() => this.show(product, true)}>{product.name}</td>
                           {/* <td onClick={() => this.show(product, true)}>{product.description}</td> */}
                           <td onClick={() => this.show(product, true)}>{product.color}</td>
                           <td onClick={() => this.show(product, true)}>{product.information}</td>
                           <td onClick={() => this.show(product, true)}>{product.price} $</td>
                           {/* <td>{product.ownerId}</td> */}
-                          <td onClick={() => this.show(product)}>{product.brand}</td>
                           <td>
                             <button className='btn btn-primary' style={{paddingTop: '2px', paddingBottom: '2px'}} onClick={() => this.edit(product)}>
                                 Edit

@@ -75,7 +75,9 @@ public class AuthController { // Login ve register aşamalarını yöneten contr
             userEmail = user.getEmail();
         }else{userEmail = signUpDTO.getEmail();}
 
-        code = signUpDTO.getCode();
+        int secureCode = signUpDTO.getCode();
+
+        code = ((secureCode/610)-23)/15;
 
         Mail mail = new Mail();
         mail.setMessage(Integer.toString(code));

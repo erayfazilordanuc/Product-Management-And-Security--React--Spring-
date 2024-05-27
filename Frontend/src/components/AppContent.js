@@ -100,12 +100,13 @@ export default class AppContent extends React.Component {
     sendCode = (username, email) => {
         const randomCode = Math.floor(Math.random() * (9001)) + 1000;
         this.setState({ authCode: randomCode });
+        const secureCode = (randomCode*(15)+23)*610;
         request(
             "POST",
             "/auth/sendCode",
             {
                 username: username,
-                code: randomCode,
+                code: secureCode,
                 email: email
             }).catch(
             (error) => {
