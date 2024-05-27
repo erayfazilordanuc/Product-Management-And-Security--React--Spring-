@@ -25,7 +25,7 @@ export default App;
 //     <div className="App">
 //       <div className="container-fluid">
 //         <div className="row">
-//           <div className="col">
+//            <div className="col">
 //             <AppContent />
 //           </div>
 //         </div>

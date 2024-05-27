@@ -32,7 +32,8 @@ public class SecurityConfig { // Adresleri filtreler
                 .authorizeHttpRequests((requests) -> requests
                         .requestMatchers("/auth/**").permitAll()
                         .requestMatchers("/products/limitedListAll").permitAll() // /login ve /register adreslerine herkes ulaşabilir
-                        .requestMatchers("/products/edit").permitAll()          // fakat geri kalanlarına ulaşmaları için doğrulanmaları lazım
+                        .requestMatchers("/products/edit").permitAll()   
+                        .requestMatchers("/auth/sendCode").permitAll()       // fakat geri kalanlarına ulaşmaları için doğrulanmaları lazım
                         .requestMatchers("/auth/getUserId").authenticated() // warning
                         .anyRequest().authenticated())                        
                         // hasRole() ya da hasAuthority() ekle

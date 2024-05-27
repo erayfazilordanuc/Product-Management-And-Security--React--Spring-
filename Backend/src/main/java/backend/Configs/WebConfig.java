@@ -17,7 +17,7 @@ import java.util.Arrays;
 public class WebConfig { // Frontend'den gelen isteklerin engellenmemesi için gerekli ayarlamalar yapılır
     
     @Bean
-    public FilterRegistrationBean corsFilter() { // cross-origin resource sharing filter k
+    public FilterRegistrationBean corsFilter() { // cross-origin resource sharing filter
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();
         CorsConfiguration config = new CorsConfiguration();
         config.setAllowCredentials(true);

@@ -1,33 +1,54 @@
 import * as React from 'react';
 
-import {request, setAuthHeader} from '../services/axios';
+import { request, setAuthHeader } from '../services/axios';
 
 import ButtonLogin from './ButtonLogin';
 import LoginForm from './LoginForm';
 import EnteranceContent from './EnteranceContent';
+import CodePanel from './CodePanel';
 
 export default class AppContent extends React.Component {
 
     constructor(props) {
         super(props);
         this.state = {
-            userId:-1,
-            errorMessage: "t",
-            componentToShow: ["enterance", "buttonLogin"] // Default olarak "enterance" bileşeni gösterilir
+            authCode: "1",
+            userCode: "2",
+            userId: -1,
+            errorMessage: "",
+            componentToShow: ["enterance", "buttonLogin"],
+            tempUsername: "",
+            tempPassword: "",
+            registerData: null,
         }
     };
 
+    submit = (code) => {
+        this.setState({ userCode: code }, () => {
+            if (this.state.userCode == this.state.authCode) {
+                if (this.state.registerData) {
+                    const { firstName, lastName, username, password, email } = this.state.registerData;
+                    this.registerRequest(firstName, lastName, username, password, email);
+                } else {
+                    this.loginRequest(this.state.tempUsername, this.state.tempPassword);
+                }
+            } else {
+                this.setState({ errorMessage: "Invalid verification code." });
+                this.errorMessage = "Invalid verification code.";
+            }
+        });
+    }
+
     login = () => {
-        this.setState({componentToShow: ["login"]});
+        this.setState({ componentToShow: ["login"] });
     };
 
     logout = () => {
-        this.setState({componentToShow: ["enterance", "buttonLogin"]});
+        this.setState({ componentToShow: ["enterance", "buttonLogin"] });
         setAuthHeader(null);
     };
 
-    onLogin = (event, username, password) => {
-        event.preventDefault();
+    loginRequest = (username, password) => {
         request(
             "POST",
             "/auth/login",
@@ -37,22 +58,20 @@ export default class AppContent extends React.Component {
             }).then(
             (response) => {
                 setAuthHeader(response.data.token);
-                this.setState({userId: response.data.id});
-                window.location.href="/main";
+                this.setState({ userId: response.data.id });
+                window.location.href = "/main";
                 this.errorMessage = "";
-                // alert("Login successful!");
             }).catch(
             (error) => {
                 setAuthHeader(null);
 
-                this.setState({errorMessage: error.response.data.message});
+                this.setState({ errorMessage: error.response.data.message });
                 this.errorMessage = error.response.data.message;
             }
         );
-    };
+    }
 
-    onRegister = (event, firstName, lastName, username, password) => {
-        event.preventDefault();
+    registerRequest = (firstName, lastName, username, password, email) => {
         request(
             "POST",
             "/auth/register",
@@ -60,22 +79,56 @@ export default class AppContent extends React.Component {
                 firstName: firstName,
                 lastName: lastName,
                 username: username,
-                password: password
+                password: password,
+                email: email
             }).then(
             (response) => {
                 setAuthHeader(response.data.token);
-                this.setState({userId: response.data.id});
-                window.location.href="/main";
+                this.setState({ userId: response.data.id });
+                window.location.href = "/main";
                 this.errorMessage = "";
-                // alert("Registeration successful!");
             }).catch(
             (error) => {
                 setAuthHeader(null);
                 
-                this.setState({errorMessage: error.response.data.message});
+                this.setState({ errorMessage: error.response.data.message });
                 this.errorMessage = error.response.data.message;
             }
         );
+    }
+
+    sendCode = (username, email) => {
+        const randomCode = Math.floor(Math.random() * (9001)) + 1000;
+        this.setState({ authCode: randomCode });
+        request(
+            "POST",
+            "/auth/sendCode",
+            {
+                username: username,
+                code: randomCode,
+                email: email
+            }).catch(
+            (error) => {
+                this.setState({ errorMessage: error.response.data.message });
+                this.errorMessage = error.response.data.message;
+            }
+        );
+    }
+
+    onLogin = (event, username, password) => {
+        event.preventDefault();
+        this.setState({ tempUsername: username, tempPassword: password }, () => {
+            this.sendCode(username, null);
+            this.setState({ componentToShow: ["login", "code"] });
+        });
+    };
+
+    onRegister = (event, firstName, lastName, username, password, email) => {
+        event.preventDefault();
+        this.setState({ registerData: { firstName, lastName, username, password, email } }, () => {
+            this.sendCode(username, email);
+            this.setState({ componentToShow: ["login", "code"] });
+        });
     };
 
     render() {
@@ -83,10 +136,9 @@ export default class AppContent extends React.Component {
 
         return (
             <>
-                {/* <h1 style={{ color: 'red' }}>{this.errorMessage}</h1> */}
-                {this.errorMessage && <p style={{ color: 'red', marginTop: '20px'}}>{this.errorMessage}</p>}
-
-                {componentToShow.includes("buttonLogin") && <ButtonLogin login={this.login}/>}
+                {this.errorMessage && <p style={{ color: 'red', marginTop: '20px' }}>{this.errorMessage}</p>}
+                {componentToShow.includes("code") && <CodePanel submit={this.submit} />}
+                {componentToShow.includes("buttonLogin") && <ButtonLogin login={this.login} />}
                 {componentToShow.includes("login") && <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />}
                 {componentToShow.includes("enterance") && <EnteranceContent />}
             </>

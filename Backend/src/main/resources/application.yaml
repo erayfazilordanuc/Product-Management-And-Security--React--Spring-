@@ -23,6 +23,17 @@ spring:
   #   user:
   #     name: user
   #     password: user
+  mail:
+    host: smtp.gmail.com
+    port: 587
+    username: fazilordanuc@gmail.com
+    password: rosfdkuccqzcalsf
+    properties:
+      mail:
+        smtp:
+          auth: true
+          starttls:
+            enable: true
 
 logging:
   level:

@@ -23,7 +23,6 @@ export default class EnteranceContent extends Component {
         }
       });
 
-    console.log(getAuthToken());
     if (getAuthToken()) {
       // Use Link to navigate instead of window.location.href
       // Adjust the path and any necessary props accordingly

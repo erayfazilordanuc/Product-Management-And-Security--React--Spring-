@@ -24,4 +24,9 @@ public class SignUpDTO {
     @NotEmpty
     private char[] password;
 
+    @NotEmpty
+    private String email;
+
+    private int code;
+
 }

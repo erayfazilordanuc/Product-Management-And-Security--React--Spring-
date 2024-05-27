@@ -2,6 +2,8 @@ package backend.Controllers;
 
 import java.net.URI;
 import java.util.List;
+import java.util.Optional;
+import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -13,8 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import backend.DTOs.MemberDTO;
 import backend.DTOs.SignUpDTO;
 import backend.DTOs.UserDTO;
+import backend.Entities.Mail;
 import backend.Entities.Product;
+import backend.Entities.User;
+import backend.Repos.UserRepo;
 import backend.Services.JWTService;
+import backend.Services.MailService;
 import backend.Services.UserService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -26,6 +32,8 @@ public class AuthController { // Login ve register aşamalarını yöneten contr
 
     private final UserService userService;
     private final JWTService jwtService;
+    private final MailService mailService;
+    private final UserRepo userRepo;
     
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody @Valid MemberDTO memberDto) throws Exception {
@@ -55,6 +63,25 @@ public class AuthController { // Login ve register aşamalarını yöneten contr
             System.out.println("Registeration is succesful!");
 
         return ResponseEntity.created(URI.create("/users/" + userDto.getId())).body(userDto); // body ile json gönderir, üstte ise diğer gerekli bilgileri barındırır
+    }
+
+    @PostMapping("/sendCode")
+    public void sendCode(@RequestBody SignUpDTO signUpDTO) throws Exception{
+        String userEmail = null;
+        int code = -1;
+        
+        if(signUpDTO.getEmail() == null){
+            UserDTO user = userService.findByUsername(signUpDTO.getUsername());
+            userEmail = user.getEmail();
+        }else{userEmail = signUpDTO.getEmail();}
+
+        code = signUpDTO.getCode();
+
+        Mail mail = new Mail();
+        mail.setMessage(Integer.toString(code));
+        mail.setSubject("Code");
+
+        mailService.sendMail(userEmail, mail);
     }
 
     @PostMapping("/getUserId")

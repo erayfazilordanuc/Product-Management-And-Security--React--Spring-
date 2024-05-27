@@ -125,6 +125,7 @@ export default class LoginForm extends React.Component {
             lastName: "",
             username: "",
             password: "",
+            email: "",
             onLogin: props.onLogin,
             onRegister: props.onRegister
         };
@@ -138,7 +139,7 @@ export default class LoginForm extends React.Component {
 
     onSubmitLogin = (e) => {
       e.preventDefault();
-      const { username, password } = this.state;
+      const { username, password} = this.state;
       if (!username || !password) {
           alert("Please enter both username and password");
           return;
@@ -148,12 +149,16 @@ export default class LoginForm extends React.Component {
   
     onSubmitRegister = (e) => {
       e.preventDefault();
-      const { firstName, lastName, username, password } = this.state;
-      if (!firstName || !lastName || !username || !password) {
+      const { firstName, lastName, username, password, email } = this.state;
+      if (!firstName || !lastName || !username || !password || !email) {
           alert("Please fill in all fields");
           return;
       }
-      this.state.onRegister(e, firstName, lastName, username, password);
+      if(!email.includes("@gmail.com")){
+        alert("Please enter a valid email");
+        return;
+      }
+      this.state.onRegister(e, firstName, lastName, username, password, email);
     };  
 
     backHome = () => {
@@ -205,6 +210,11 @@ export default class LoginForm extends React.Component {
                   <div className="form-outline mb-4">
                     <label className="form-label" htmlFor="lastName">Last name</label>
                     <input type="text" id="lastName" name="lastName" className="form-control" onChange={this.onChangeHandler}/>
+                  </div>
+
+                  <div className="form-outline mb-4">
+                    <label className="form-label" htmlFor="email">Email</label>
+                    <input type="text" id="email" name="email" className="form-control" onChange={this.onChangeHandler}/>
                   </div>
 
                   <div className="form-outline mb-4">
