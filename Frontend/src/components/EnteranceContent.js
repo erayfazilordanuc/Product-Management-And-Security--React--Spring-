@@ -49,7 +49,7 @@ export default class EnteranceContent extends Component {
           {/* <ButtonLogout logout={this.handleLogout} /> Include ButtonLogout component */}
         </header>
 
-        <main style={{marginLeft: '250px', marginRight:'250px'}}>
+        <main style={{marginLeft: '400px', marginRight:'400px'}}>
           <div id="imageContainer"></div>
           <div className="container mt-1 mb-5">
             <h2 className='mb-4'>All Products</h2>
@@ -60,7 +60,9 @@ export default class EnteranceContent extends Component {
                     {this.state.data.map((product) => (
                       <tr key={product} style={{cursor: "default"}}>
                         <td>{product.brand} {product.name}</td>
-                        <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image" /> {/*imageUrls dizininden adresleri alır ve oradan resimleri gösterir */}
+                        <td>
+                          <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image" /> {/*imageUrls dizininden adresleri alır ve oradan resimleri gösterir */}
+                        </td>
                       </tr>
                     ))}
                   </tbody>
