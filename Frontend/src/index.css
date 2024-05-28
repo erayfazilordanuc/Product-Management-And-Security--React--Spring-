@@ -46,7 +46,7 @@ footer {
 }
 
 td{
-  font-size: 18px;
+  font-size: 14px;
   margin-top: 20px;
 }
 
@@ -58,6 +58,9 @@ tr:hover {
   cursor: pointer;
 }
 
+table {
+  font-size: 15px;
+}
 
 
 /* html, body {

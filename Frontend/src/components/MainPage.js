@@ -156,7 +156,7 @@ export default class MainPage extends React.Component {
     }
 
     return (
-      <div style={{marginLeft: '150px', marginRight:'150px'}}>
+      <div style={{marginLeft: '200px', marginRight:'200px'}}>
         <header>
           <h2>Product Store</h2>
           {/* <ButtonLogout logout={this.handleLogout} /> Include ButtonLogout component */}
@@ -193,7 +193,7 @@ export default class MainPage extends React.Component {
                           <td onClick={() => this.show(product, true)}>{product.information}</td>
                           <td onClick={() => this.show(product, true)}>{product.price} $</td>
                           <td>
-                            <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                            <img style={{width: "150px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
                           </td>
                           {/* <td>{product.ownerId}</td> */}
                           <td>
