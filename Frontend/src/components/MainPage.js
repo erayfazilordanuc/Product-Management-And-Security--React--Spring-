@@ -192,7 +192,9 @@ export default class MainPage extends React.Component {
                           <td onClick={() => this.show(product, true)}>{product.color}</td>
                           <td onClick={() => this.show(product, true)}>{product.information}</td>
                           <td onClick={() => this.show(product, true)}>{product.price} $</td>
-                          <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                          <td>
+                            <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                          </td>
                           {/* <td>{product.ownerId}</td> */}
                           <td>
                             <button className='btn btn-primary' style={{paddingTop: '2px', paddingBottom: '2px'}} onClick={() => this.edit(product)}>
@@ -277,7 +279,9 @@ export default class MainPage extends React.Component {
                             <td>{product.color}</td>
                             <td>{product.information}</td>
                             <td>{product.price} $</td>
-                            <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                            <td>
+                              <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                            </td>
                             {/* <td>{product.ownerId}</td> */}
                           </tr>
                           {this.state.allProdsShowing === product.id && (
