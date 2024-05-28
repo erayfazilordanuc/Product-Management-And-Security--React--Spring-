@@ -35,9 +35,11 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
     
     private final ProductService productService;
 
+    private final String imageFolderLocation = "public/images/";
+
     @GetMapping("/getImage")
     public ResponseEntity<ByteArrayResource> getImage(@RequestParam("id") int id) throws IOException {
-        Path path = Paths.get("src/main/resources/images/" + id + ".png");
+        Path path = Paths.get(imageFolderLocation + id + ".png");
 
         byte[] data = Files.readAllBytes(path);
         
@@ -51,9 +53,9 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
         byte[] bytes = image.getBytes();
         Path path = null;
         if(prodId == -1){
-            path = Paths.get("src/main/resources/images/" + productService.getTheBiggestId() + ".png");
+            path = Paths.get(imageFolderLocation + productService.getTheBiggestId() + ".png");
         }else{
-            path = Paths.get("src/main/resources/images/" + prodId + ".png");
+            path = Paths.get(imageFolderLocation + prodId + ".png");
             Files.delete(path);
         }
         Files.write(path, bytes);
@@ -86,7 +88,7 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
     @PostMapping("/delete")
     public void delete(@RequestBody int id) throws IOException{
         productService.delete(id);
-        Path path = Paths.get("src/main/resources/images/" + id + ".png");
+        Path path = Paths.get(imageFolderLocation + id + ".png");
         Files.delete(path);
     }
 }

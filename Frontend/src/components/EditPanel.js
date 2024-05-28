@@ -65,7 +65,15 @@ function EditPanel(props) {
   }
 
   const onImageChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const image = e.target.files[0];
+    if(image){
+      setSelectedFile(image);
+      const previewUrl = URL.createObjectURL(image);
+      setImageUrls(prevState => ({
+        ...prevState,
+        [props.dataToEdit.id]: previewUrl
+      }));
+    }
   }
 
   return (
