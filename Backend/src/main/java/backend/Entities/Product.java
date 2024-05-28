@@ -1,5 +1,8 @@
 package backend.Entities;
 
+import org.springframework.core.io.Resource;
+
+import jakarta.mail.Multipart;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -42,6 +45,11 @@ public class Product {
     private int ownerId;
 
     @Column
-    private String brand;
+    private String brand;   
+
+    // @Column
+    // private String imageName;
+
+    // private Resource image; // --> for blob update
 
 }

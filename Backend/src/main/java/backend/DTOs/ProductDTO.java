@@ -1,5 +1,7 @@
 package backend.DTOs;
 
+import org.springframework.web.multipart.MultipartFile;
+
 import jakarta.validation.constraints.NotEmpty;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -33,5 +35,7 @@ public class ProductDTO {
 
     @NotEmpty
     private String brand;
+
+    // private MultipartFile image;
 
 }

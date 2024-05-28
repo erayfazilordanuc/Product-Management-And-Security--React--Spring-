@@ -10,17 +10,27 @@ function EditPanel(props) {
     brand: ''
   });
 
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const [imageUrls, setImageUrls] = useState({});
+
   useEffect(() => {
     if (props.dataToEdit) {
       setEditData(props.dataToEdit);
+      getImage(props.dataToEdit.id);
     }
+    
   }, [props.dataToEdit]);
 
   const onSave = () => {
       props.onSave(editData);
-      alert("The products successfuly edited, please reload the page to see the changes.")
+      setTimeout(() => {
+        props.onUploadImage(selectedFile, props.dataToEdit.id); // Son kaydedilen ürünün id'sine göre resimleri adlandırdığı için son ürün kaydedilene kadar beklemesi lazım
+      }, 500);
       props.onCancel();
-      window.location.href="/main";
+      setTimeout(() => {
+        window.location.href="/main";
+      }, 750);
   };
 
   const onCancel = () => {
@@ -46,6 +56,17 @@ function EditPanel(props) {
       }));
     }
   };
+
+  const getImage = (productId) => {
+    setImageUrls(prevState => ({
+      ...prevState,
+      [productId]: "http://localhost:8080/products/getImage?id=" + productId
+    }));
+  }
+
+  const onImageChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  }
 
   return (
     <div style={{cursor: 'default'}}>
@@ -99,6 +120,18 @@ function EditPanel(props) {
             name="brand"
             value={editData.brand}
             onChange={onChange}
+          />
+          <label>Image</label>
+          <div><img className="mt-3" src={imageUrls[props.dataToEdit.id]} alt="Product" style={{width: "250px"}}/></div>
+          <input
+            className="form-control mb-3 mt-4"
+            id="file"
+            name="file"
+            type="file"
+            multiple
+            encType="multipart/form-data"
+            accept="image/*"
+            onChange={onImageChange}
           />
           <button
             className="btn btn-danger"

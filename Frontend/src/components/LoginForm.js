@@ -48,7 +48,7 @@ export default class LoginForm extends React.Component {
     };  
 
     backHome = () => {
-      window.location.reload();
+      window.location.href="/";
     }
 
     render() {

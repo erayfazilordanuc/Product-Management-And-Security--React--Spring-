@@ -16,10 +16,15 @@ axios.defaults.baseURL = 'http://localhost:8080';
 axios.defaults.headers.post['Content-Type'] = 'application/json';
 
 export const request = (method, url, data) => {
-
     let headers = {};
     if(getAuthToken() !== null && getAuthToken() !== "null") {
         headers = {'Authorization': `Bearer ${getAuthToken()}`};
+    }
+
+    if (data instanceof FormData) {
+        headers = { ...headers, 'Content-Type': 'multipart/form-data' };
+    } else {
+        headers = { ...headers, 'Content-Type': 'application/json' };
     }
 
     return axios({
@@ -28,5 +33,4 @@ export const request = (method, url, data) => {
         headers: headers,
         data: data
     });
-
-}
+};

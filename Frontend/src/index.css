@@ -9,6 +9,7 @@
 
 body {
   /* display: flex; */
+  overflow-x: hidden;
   justify-content: center;
   align-items: center;
 }
@@ -23,9 +24,8 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #65de92; /* Header arka plan rengi */
-  color: #353535; /* Header metin rengi */
-  padding: 1px; /* Header iç kenar boşluğu */
+  background-color: #65de92;
+  color: #353535;
 }
 
 header h2 {
@@ -41,7 +41,8 @@ footer {
   width: 100%;
   background-color: #65de92; /* Footer arka plan rengi */
   color: #353535; /* Footer metin rengi */
-  padding: 1px;
+  padding-top: 0px;
+  margin-bottom: -7px;
 }
 
 td{

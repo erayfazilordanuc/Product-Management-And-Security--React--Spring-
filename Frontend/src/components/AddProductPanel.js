@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState} from 'react';
 
 function AddProductPanel(props) {
   const [dataToAdd, setDataToAdd] = useState({
@@ -11,11 +11,21 @@ function AddProductPanel(props) {
     ownerId: props.userId
   });
 
-  const onSave = () => {
-    console.log(dataToAdd.ownerId);
+  const [selectedFile, setSelectedFile] = useState(null);
+
+  const onSave = async () => {
+    if (!dataToAdd.name || !dataToAdd.description || !dataToAdd.color || !dataToAdd.information || !dataToAdd.price || !dataToAdd.brand || !dataToAdd.ownerId) {
+      alert('Please fill in all fields');
+      return; // Eğer bir input boşsa işlemi sonlandır
+    }
     props.onSave(dataToAdd);
+    setTimeout(() => {
+      props.onUploadImage(selectedFile, -1); // Son kaydedilen ürünün id'sine göre resimleri adlandırdığı için son ürün kaydedilene kadar beklemesi lazım
+    }, 500);
     props.onCancel();
-    window.location.href="/main";
+    setTimeout(() => {
+      window.location.href="/main";
+    }, 750);
   };
 
   const onCancel = () => {
@@ -34,11 +44,23 @@ function AddProductPanel(props) {
     }
   };
 
+  const onImageChange = (e) => {
+    setSelectedFile(e.target.files[0]);
+  }
+
   return (
     <div>
       {dataToAdd && (
         <div className="mb-4 mt-3 border p-2" style={{marginLeft: '150px', marginRight:'150px'}}>
           <h4 className="mb-3">New Product</h4>
+          <label>Brand</label>
+          <input
+            className="form-control mb-3"
+            type="text"
+            name="brand"
+            value={dataToAdd.brand}
+            onChange={onChange}
+          />
           <label>Name</label>
           <input
             className="form-control mb-3"
@@ -79,13 +101,16 @@ function AddProductPanel(props) {
             value={dataToAdd.price}
             onChange={onChange}
           />
-          <label>Brand</label>
+          <label>Image</label>
           <input
             className="form-control mb-3"
-            type="text"
-            name="brand"
-            value={dataToAdd.brand}
-            onChange={onChange}
+            id="file"
+            name="file"
+            type="file"
+            multiple
+            encType="multipart/form-data"
+            accept="image/*"
+            onChange={onImageChange}
           />
           <button
             className="btn btn-secondary"

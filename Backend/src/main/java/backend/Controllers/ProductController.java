@@ -1,14 +1,26 @@
 package backend.Controllers;
 
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 
+import org.apache.catalina.connector.Response;
+import org.springframework.core.io.ByteArrayResource;
+import org.springframework.core.io.Resource;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import backend.DTOs.LimitedDto;
 import backend.DTOs.ProductDTO;
@@ -23,10 +35,29 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
     
     private final ProductService productService;
 
-    // @GetMapping("/home")
-    // public ResponseEntity<String> home(){ // test
-    //     return ResponseEntity.ok("Mission successful, Welcome to the home!");
-    // }
+    @GetMapping("/getImage")
+    public ResponseEntity<ByteArrayResource> getImage(@RequestParam("id") int id) throws IOException {
+        Path path = Paths.get("src/main/resources/images/" + id + ".png");
+
+        byte[] data = Files.readAllBytes(path);
+        
+        ByteArrayResource resource = new ByteArrayResource(data);
+
+        return ResponseEntity.ok().contentType(MediaType.IMAGE_PNG).body(resource);
+    }
+
+    @PostMapping("/uploadImage")
+    public void uploadImage(@RequestParam("file") MultipartFile image, @RequestParam int prodId) throws IOException {
+        byte[] bytes = image.getBytes();
+        Path path = null;
+        if(prodId == -1){
+            path = Paths.get("src/main/resources/images/" + productService.getTheBiggestId() + ".png");
+        }else{
+            path = Paths.get("src/main/resources/images/" + prodId + ".png");
+            Files.delete(path);
+        }
+        Files.write(path, bytes);
+    }
 
     @GetMapping("/limitedListAll")
     public ResponseEntity<List<LimitedDto>> limitedAllProducts(){
@@ -36,6 +67,7 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
             LimitedDto temp = new LimitedDto();
             temp.setName(allProducts.get(i).getName());
             temp.setBrand(allProducts.get(i).getBrand());
+            temp.setId(allProducts.get(i).getId());
             info.add(temp);
         }
         return ResponseEntity.ok(info);
@@ -47,12 +79,14 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
     }
 
     @PostMapping("/save")
-    public void edit(@RequestBody ProductDTO productDto){
+    public void edit(@RequestBody ProductDTO productDto) throws IOException{
         productService.save(productDto);
     }
     
     @PostMapping("/delete")
-    public void delete(@RequestBody int id){
+    public void delete(@RequestBody int id) throws IOException{
         productService.delete(id);
+        Path path = Paths.get("src/main/resources/images/" + id + ".png");
+        Files.delete(path);
     }
 }

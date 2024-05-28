@@ -7,6 +7,7 @@ export default class EnteranceContent extends Component {
     super(props);
     this.state = {
       data: [],
+      imageUrls: {}
     };
   }
 
@@ -14,6 +15,12 @@ export default class EnteranceContent extends Component {
     request('GET', '/products/limitedListAll', {}) 
       .then((response) => {
         this.setState({ data: response.data });
+
+        response.data.forEach(product => {
+          this.getImage(product.id); // Alınan her ürünün id'sine bir istek yollar
+        });
+        
+        console.log(this.state.imageUrls);
       })
       .catch((error) => {
         if (error.response.status === 401) {
@@ -21,12 +28,17 @@ export default class EnteranceContent extends Component {
         } else {
           this.setState({ data: error.response.code });
         }
-      });
-
+      }
+    );
+         
     if (getAuthToken()) {
       window.location.href='/main';
       // to pass data --> <Link to={{ pathname: '/main', state: { data: this.state.data }}}>Main</Link>
     }
+  }
+
+  getImage(productId) {
+    this.state.imageUrls[productId] = "http://localhost:8080/products/getImage?id=" + productId; // gönderilen isteklerin adreslerini imageUrls'e kaydeder
   }
 
   render() {
@@ -38,6 +50,7 @@ export default class EnteranceContent extends Component {
         </header>
 
         <main style={{marginLeft: '250px', marginRight:'250px'}}>
+          <div id="imageContainer"></div>
           <div className="container mt-1 mb-5">
             <h2 className='mb-4'>All Products</h2>
             <div>
@@ -47,6 +60,7 @@ export default class EnteranceContent extends Component {
                     {this.state.data.map((product) => (
                       <tr key={product} style={{cursor: "default"}}>
                         <td>{product.brand} {product.name}</td>
+                        <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image" /> {/*imageUrls dizininden adresleri alır ve oradan resimleri gösterir */}
                       </tr>
                     ))}
                   </tbody>
@@ -59,7 +73,7 @@ export default class EnteranceContent extends Component {
         </main>
 
         <footer>
-          <h7>Product Store &copy; 2024</h7>
+          <h6>Product Store &copy; 2024</h6>
         </footer>
       </div>
     );
