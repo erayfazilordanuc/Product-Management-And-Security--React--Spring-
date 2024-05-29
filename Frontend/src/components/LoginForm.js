@@ -53,7 +53,7 @@ export default class LoginForm extends React.Component {
 
     render() {
         return (
-        <div className="row justify-content-center">
+        <div className="row justify-content-center" style={{backgroundColor: 'white'}}>
           <h1 className='mb-5 mt-4'>Login</h1>
             <div className="col-4">
             <ul className="nav nav-pills nav-justified mb-3" id="ex1" role="tablist">

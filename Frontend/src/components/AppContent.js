@@ -2,7 +2,6 @@ import * as React from 'react';
 
 import { request, setAuthHeader } from '../services/axios';
 
-import ButtonLogin from './ButtonLogin';
 import LoginForm from './LoginForm';
 import EnteranceContent from './EnteranceContent';
 import CodePanel from './CodePanel';
@@ -137,11 +136,12 @@ export default class AppContent extends React.Component {
 
         return (
             <>
+            <div>
                 {this.errorMessage && <p style={{ color: 'red', marginTop: '20px' }}>{this.errorMessage}</p>}
                 {componentToShow.includes("code") && <CodePanel submit={this.submit} />}
-                {componentToShow.includes("buttonLogin") && <ButtonLogin login={this.login} />}
                 {componentToShow.includes("login") && <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />}
-                {componentToShow.includes("enterance") && <EnteranceContent />}
+                {componentToShow.includes("enterance") && <EnteranceContent login={this.login}/>}
+            </div>
             </>
         );
     }

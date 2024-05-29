@@ -24,7 +24,7 @@ function ShowPanel(props) {
   return (
     <div>
       {props.dataToShow && (
-        <div className="mb-4 mt-4 border p-2" style={{cursor: 'default'}}>
+        <div className="mb-4 mt-5 border p-2" style={{cursor: 'default'}}>
           <p>Brand : {props.dataToShow.brand}</p>
           <p>Name : {props.dataToShow.name}</p>
           <p>Description : {props.dataToShow.description}</p>

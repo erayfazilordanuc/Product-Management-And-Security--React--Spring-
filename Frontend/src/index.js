@@ -6,7 +6,10 @@ import reportWebVitals from './reportWebVitals';
 import 'bootstrap/dist/css/bootstrap.min.css';
 
 const root = ReactDOM.createRoot(document.getElementById('root'));
-root.render(<App/>);
+root.render(
+    <div style={{backgroundColor: '#f1f1f1', marginBottom: '-45px'}}>
+        <App/>
+    </div>);
 // React.StrictMode can be use
 
 // If you want to start measuring performance in your app, pass a function

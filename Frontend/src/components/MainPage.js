@@ -3,7 +3,6 @@ import { request, setAuthHeader, getAuthToken} from '../services/axios';
 import EditPanel from './EditPanel';
 import ShowPanel from './ShowPanel';
 import AddProductPanel from './AddProductPanel';
-import ButtonLogout from './ButtonLogout';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 
@@ -88,9 +87,9 @@ export default class MainPage extends React.Component {
         this.setState({allProdsShowing: null});
       }else{
         this.setState({allProdsShowing: product.id, allProdsDataToShow: product}, () => {
-          const element = document.getElementById(`showProduct${product.id}`);
+          const element = document.getElementById(`showAllProduct${product.id}`);
           if(element){
-            element.scrollIntoView({behavior: "smooth", block: "start"});
+            element.scrollIntoView({block: "start"});
           }
         });
       }
@@ -104,7 +103,7 @@ export default class MainPage extends React.Component {
         this.setState({ showingProductId: product.id, dataToShow: product }, () => {
           const element = document.getElementById(`showProduct${product.id}`);
           if (element) {
-            element.scrollIntoView({behavior: "smooth", block: "start"});
+            element.scrollIntoView({block: "start"});
           }
         });
       }
@@ -165,8 +164,10 @@ export default class MainPage extends React.Component {
   }
 
   logout = () => {
-    window.location.href="/";
-    setAuthHeader(null);
+    if(window.confirm("Are you sure to logout?")){
+      window.location.href="/";
+      setAuthHeader(null);
+    }
   };  
 
   render() {
@@ -177,18 +178,17 @@ export default class MainPage extends React.Component {
 
     return (
       <div style={{marginLeft: '250px', marginRight:'250px'}}>
-        <header>
-          <h4>Product Store</h4>
-          {/* <ButtonLogout logout={this.handleLogout} /> Include ButtonLogout component */}
+        <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <h4 style={{textAlign: 'left', marginLeft: '5px'}}>Product Store</h4>
+          <button className='btn btn-danger mt-1 mb-1 mx-1' onClick={this.logout}>Logout</button>
         </header>
 
         <main>
-          <ButtonLogout logout={this.logout}/>
-          <div className="container mt-1 mb-5">
+          <div className="container mb-5" style={{marginTop: '45px'}}>
           <h4 className="mt-1 mb-3">Your Products</h4>
             <div>
               {this.state.userProductsData.length > 0 ? (
-                <table  className='table table-light'>
+                <table className='table table-light'>
                   <thead>
                     <tr>
                       <th>Brand</th>
@@ -224,7 +224,7 @@ export default class MainPage extends React.Component {
                         </tr>
                         {this.state.showingProductId === product.id && (
                           <tr>
-                            <td id={`showProduct${this.state.showingProductId}`} colSpan="7">
+                            <td style={{backgroundColor: '#f6f6f6'}} id={`showProduct${this.state.showingProductId}`} colSpan="7">
                               <ShowPanel
                                 dataToShow={this.state.dataToShow}
                                 onClose={() => this.setState({ showingProductId: null })}
@@ -234,7 +234,7 @@ export default class MainPage extends React.Component {
                         )}
                         {this.state.editingProductId === product.id && (
                           <tr>
-                            <td id={`editProduct${this.state.editingProductId}`} colSpan="7">
+                            <td style={{backgroundColor: '#f6f6f6'}} id={`editProduct${this.state.editingProductId}`} colSpan="7">
                               <EditPanel
                                 onUploadImage={this.onUploadImage}
                                 onDelete={this.onDelete}
@@ -259,7 +259,7 @@ export default class MainPage extends React.Component {
                 Add Product
               </button>
               {this.state.addingProduct && (
-                <div>
+                <div style={{backgroundColor: '#f6f6f6'}}>
                   <AddProductPanel
                     onUploadImage={this.onUploadImage}
                     userId={this.state.passedUserId ||this.state.userId}
@@ -309,7 +309,7 @@ export default class MainPage extends React.Component {
                           </tr>
                           {this.state.allProdsShowing === product.id && (
                             <tr>
-                              <td id={`showProduct${this.state.allProdsShowing}`} colSpan="7">
+                              <td style={{backgroundColor: '#f6f6f6'}} id={`showAllProduct${this.state.allProdsShowing}`} colSpan="7">
                                 <ShowPanel
                                   dataToShow={this.state.allProdsDataToShow}
                                   onClose={() => this.setState({ allProdsShowing: null })}
@@ -329,9 +329,9 @@ export default class MainPage extends React.Component {
           </div>
         </main>
 
-        <footer>
+        {/* <footer>
           <h6>Product Store &copy; 2024</h6>
-        </footer>
+        </footer> */}
       </div>
     );
   }

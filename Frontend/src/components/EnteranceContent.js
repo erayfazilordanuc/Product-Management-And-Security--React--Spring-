@@ -42,12 +42,12 @@ export default class EnteranceContent extends Component {
   render() {
     return (
       <div>
-        <header>
-          <h2>Product Store</h2>
-          {/* <ButtonLogout logout={this.handleLogout} /> Include ButtonLogout component */}
+        <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
+          <h4 style={{textAlign: 'left', marginLeft: '5px'}}>Product Store</h4>
+          <button className='btn btn-primary mt-1 mb-1 mx-1' onClick={this.props.login}>Login</button>
         </header>
 
-        <main style={{marginLeft: '400px', marginRight:'400px'}}>
+        <main style={{marginLeft: '400px', marginRight:'400px', marginTop: '45px'}}>
           <div id="imageContainer"></div>
           <div className="container mt-1 mb-5">
             <h2 className='mb-4'>All Products</h2>

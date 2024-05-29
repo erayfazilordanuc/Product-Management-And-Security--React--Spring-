@@ -24,14 +24,14 @@ header {
   top: 0;
   left: 0;
   width: 100%;
-  background-color: #65de92;
+  background-color: #c0c0c0;
   color: #353535;
 }
 
-header h2 {
-  text-align: left;
+header h4 {
   margin-left: 5px;
-  font-size: 32px;
+  margin-bottom: 3px;
+  font-size: 27px;
 }
 
 footer {
@@ -39,7 +39,7 @@ footer {
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #65de92; /* Footer arka plan rengi */
+  background-color: #77e29e; /* Footer arka plan rengi */
   color: #353535; /* Footer metin rengi */
   padding-top: 0px;
   margin-bottom: -7px;
