@@ -23,7 +23,8 @@ export default class MainPage extends React.Component {
       showingProductId: null,
       addingProduct: false,
       isLoading: true,
-      imageUrls: {}
+      imageUrls: {},
+      myProducts: false
     };
     this.productRefs = {};
   }
@@ -109,7 +110,12 @@ export default class MainPage extends React.Component {
       }
     }
   }
-  
+
+  myProds = () => {
+    this.setState((prevState) => ({
+      myProducts: !prevState.myProducts // showAllProduct değerini öncekinin tersi yap
+    }));
+  }
 
   toggleAllProducts = () => {
     this.setState((prevState) => ({
@@ -184,9 +190,13 @@ export default class MainPage extends React.Component {
         </header>
 
         <main>
-          <div className="container mb-5" style={{marginTop: '45px'}}>
-          <h4 className="mt-1 mb-3">Your Products</h4>
-            <div>
+          <div id='myProds' className="container mb-5" style={{marginTop: '45px'}}>
+            <button className={`btn ${this.state.myProducts ? 'btn-secondary' : 'btn-info'} mb-3 mt-3`} onClick={this.myProds}>
+            {this.state.myProducts ? 'Hide My Products' : 'Show My Products'}
+            </button>
+            {this.state.myProducts && (
+              <div>
+              <h4 className="mt-1 mb-3">Your Products</h4>
               {this.state.userProductsData.length > 0 ? (
                 <table className='table table-light'>
                   <thead>
@@ -253,7 +263,8 @@ export default class MainPage extends React.Component {
               ) : (
                 <p>You haven't added a product yet</p>
               )}
-            </div>
+              </div>
+            )}
             <div>
               <button id='addButton' className='btn btn-success mb-3' onClick={this.onAdd}>
                 Add Product
