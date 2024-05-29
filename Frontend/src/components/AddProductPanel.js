@@ -11,6 +11,8 @@ function AddProductPanel(props) {
     ownerId: props.userId
   });
 
+  const [previewUrl, setPreviewUrl] = useState(null);
+
   const [selectedFile, setSelectedFile] = useState(null);
 
   const onSave = async () => {
@@ -45,7 +47,11 @@ function AddProductPanel(props) {
   };
 
   const onImageChange = (e) => {
-    setSelectedFile(e.target.files[0]);
+    const image = e.target.files[0];
+    if(image){
+      setSelectedFile(image);
+      setPreviewUrl(URL.createObjectURL(image));
+    }
   }
 
   return (
@@ -102,6 +108,9 @@ function AddProductPanel(props) {
             onChange={onChange}
           />
           <label>Image</label>
+          <div>
+            {previewUrl && (<img className="mt-3 mb-3" src={previewUrl} alt="Product" style={{width: "250px"}}/>)}
+          </div>
           <input
             className="form-control mb-3"
             id="file"

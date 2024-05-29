@@ -79,8 +79,16 @@ function EditPanel(props) {
   return (
     <div style={{cursor: 'default'}}>
       {editData && (
-        <div className="mb-4 mt-3 border p-2" style={{marginLeft: '150px', marginRight:'150px'}}>
+        <div className="mb-4 border p-2" style={{marginLeft: '150px', marginRight:'150px', marginTop: "35px"}}>
           <h4 className="mb-3">Editing Product</h4>
+          <label>Brand</label>
+          <input
+            className="form-control mb-3"
+            type="text"
+            name="brand"
+            value={editData.brand}
+            onChange={onChange}
+          />
           <label>Name</label>
           <input
             className="form-control mb-3"
@@ -121,18 +129,12 @@ function EditPanel(props) {
             value={editData.price}
             onChange={onChange}
           />
-          <label>Brand</label>
+          <label>Image</label>
+          <div>
+            <img className="mt-3 mb-3" src={imageUrls[props.dataToEdit.id]} alt="Product" style={{width: "250px"}}/>
+          </div>
           <input
             className="form-control mb-3"
-            type="text"
-            name="brand"
-            value={editData.brand}
-            onChange={onChange}
-          />
-          <label>Image</label>
-          <div><img className="mt-3" src={imageUrls[props.dataToEdit.id]} alt="Product" style={{width: "250px"}}/></div>
-          <input
-            className="form-control mb-3 mt-4"
             id="file"
             name="file"
             type="file"

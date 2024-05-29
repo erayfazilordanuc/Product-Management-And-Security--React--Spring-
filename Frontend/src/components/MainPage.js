@@ -7,10 +7,6 @@ import ButtonLogout from './ButtonLogout';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
 
-// import ButtonLogout from './ButtonLogout';
-// İsimlendirmeler düzenlenebilir
-// Karmaşıklıklar azaltılabilir
-
 export default class MainPage extends React.Component {
   constructor(props) {
     super(props);
@@ -30,6 +26,7 @@ export default class MainPage extends React.Component {
       isLoading: true,
       imageUrls: {}
     };
+    this.productRefs = {};
   }
 
   componentDidMount() {
@@ -76,36 +73,54 @@ export default class MainPage extends React.Component {
       if(this.state.showingProductId && this.state.showingProductId === product.id){
         this.setState({showingProductId: null});
       }
-      this.setState({dataToEdit: product});
-      this.setState({editingProductId: product.id });
+      this.setState({dataToEdit: product, editingProductId: product.id }, () => {
+        const element = document.getElementById(`editProduct${product.id}`);
+        if(element) {
+          element.scrollIntoView({behavior: "smooth", block: "start"});
+        }
+      });
     }
   }
 
   show = (product, isOwned) => {
-    if(isOwned === false){
+    if (isOwned === false) {
       if(this.state.allProdsShowing && this.state.allProdsShowing === product.id){
         this.setState({allProdsShowing: null});
       }else{
-        this.setState({allProdsShowing: product.id})
-        this.setState({allProdsDataToShow: product});
+        this.setState({allProdsShowing: product.id, allProdsDataToShow: product}, () => {
+          const element = document.getElementById(`showProduct${product.id}`);
+          if(element){
+            element.scrollIntoView({behavior: "smooth", block: "start"});
+          }
+        });
       }
-    }else{
-    if(this.state.showingProductId && this.state.showingProductId === product.id){
-      this.setState({showingProductId: null});
-    }else{
-      if(this.state.editingProductId && this.state.editingProductId === product.id){
-        this.setState({editingProductId: null});
-      }
-        this.setState({showingProductId: product.id });
-        this.setState({dataToShow: product});
+    } else {
+      if (this.state.showingProductId && this.state.showingProductId === product.id) {
+        this.setState({ showingProductId: null });
+      } else {
+        if (this.state.editingProductId && this.state.editingProductId === product.id) {
+          this.setState({ editingProductId: null });
+        }
+        this.setState({ showingProductId: product.id, dataToShow: product }, () => {
+          const element = document.getElementById(`showProduct${product.id}`);
+          if (element) {
+            element.scrollIntoView({behavior: "smooth", block: "start"});
+          }
+        });
       }
     }
   }
+  
 
   toggleAllProducts = () => {
     this.setState((prevState) => ({
       showAllProducts: !prevState.showAllProducts // showAllProduct değerini öncekinin tersi yap
-    }));
+    }), () => {
+      if(this.state.showAllProducts){
+        const showAllProdButton = document.getElementById('showAllProdsButton');
+        showAllProdButton.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+    });
   }
 
   onSave = (data) => {
@@ -123,7 +138,12 @@ export default class MainPage extends React.Component {
   }
 
   onAdd = () => {
-    this.setState(prevState => ({ addingProduct: !prevState.addingProduct }));
+    this.setState(prevState => ({ addingProduct: !prevState.addingProduct }), () => {
+      if(this.state.addingProduct){
+        const addButon = document.getElementById('addButton');
+        addButon.scrollIntoView({behavior: 'smooth', block: 'start'});
+      }
+    });
   }
 
   onDelete = (id) => {
@@ -156,16 +176,16 @@ export default class MainPage extends React.Component {
     }
 
     return (
-      <div style={{marginLeft: '200px', marginRight:'200px'}}>
+      <div style={{marginLeft: '250px', marginRight:'250px'}}>
         <header>
-          <h2>Product Store</h2>
+          <h4>Product Store</h4>
           {/* <ButtonLogout logout={this.handleLogout} /> Include ButtonLogout component */}
         </header>
 
         <main>
           <ButtonLogout logout={this.logout}/>
           <div className="container mt-1 mb-5">
-          <h3 className="mt-1 mb-3">Your Products</h3>
+          <h4 className="mt-1 mb-3">Your Products</h4>
             <div>
               {this.state.userProductsData.length > 0 ? (
                 <table  className='table table-light'>
@@ -193,7 +213,7 @@ export default class MainPage extends React.Component {
                           <td onClick={() => this.show(product, true)}>{product.information}</td>
                           <td onClick={() => this.show(product, true)}>{product.price} $</td>
                           <td>
-                            <img style={{width: "150px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                            <img style={{width: "150px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image" onClick={() => this.show(product, true)}/>
                           </td>
                           {/* <td>{product.ownerId}</td> */}
                           <td>
@@ -204,7 +224,7 @@ export default class MainPage extends React.Component {
                         </tr>
                         {this.state.showingProductId === product.id && (
                           <tr>
-                            <td colSpan="7">
+                            <td id={`showProduct${this.state.showingProductId}`} colSpan="7">
                               <ShowPanel
                                 dataToShow={this.state.dataToShow}
                                 onClose={() => this.setState({ showingProductId: null })}
@@ -214,7 +234,7 @@ export default class MainPage extends React.Component {
                         )}
                         {this.state.editingProductId === product.id && (
                           <tr>
-                            <td colSpan="7">
+                            <td id={`editProduct${this.state.editingProductId}`} colSpan="7">
                               <EditPanel
                                 onUploadImage={this.onUploadImage}
                                 onDelete={this.onDelete}
@@ -235,19 +255,22 @@ export default class MainPage extends React.Component {
               )}
             </div>
             <div>
-              <button className='btn btn-success mb-3' onClick={this.onAdd}>
+              <button id='addButton' className='btn btn-success mb-3' onClick={this.onAdd}>
                 Add Product
               </button>
               {this.state.addingProduct && (
-                <AddProductPanel
-                  onUploadImage={this.onUploadImage}
-                  userId={this.state.passedUserId ||this.state.userId}
-                  onSave={this.onSave}
-                  onCancel={() => this.setState({ addingProduct: false })}
-                />
+                <div>
+                  <AddProductPanel
+                    onUploadImage={this.onUploadImage}
+                    userId={this.state.passedUserId ||this.state.userId}
+                    onSave={this.onSave}
+                    onCancel={() => this.setState({ addingProduct: false })}
+                  />
+                </div>
               )}
             </div>
             <button 
+              id='showAllProdsButton'
               className={`btn ${this.state.showAllProducts ? 'btn-secondary' : 'btn-primary'} mb-3`}
               onClick={this.toggleAllProducts}
             >
@@ -286,7 +309,7 @@ export default class MainPage extends React.Component {
                           </tr>
                           {this.state.allProdsShowing === product.id && (
                             <tr>
-                              <td colSpan="7">
+                              <td id={`showProduct${this.state.allProdsShowing}`} colSpan="7">
                                 <ShowPanel
                                   dataToShow={this.state.allProdsDataToShow}
                                   onClose={() => this.setState({ allProdsShowing: null })}
@@ -307,7 +330,7 @@ export default class MainPage extends React.Component {
         </main>
 
         <footer>
-          <h7>Product Store &copy; 2024</h7>
+          <h6>Product Store &copy; 2024</h6>
         </footer>
       </div>
     );

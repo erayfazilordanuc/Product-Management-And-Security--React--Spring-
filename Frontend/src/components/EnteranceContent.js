@@ -6,7 +6,7 @@ export default class EnteranceContent extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      data: [],
+      data: {},
       imageUrls: {}
     };
   }
@@ -19,8 +19,6 @@ export default class EnteranceContent extends Component {
         response.data.forEach(product => {
           this.getImage(product.id); // Alınan her ürünün id'sine bir istek yollar
         });
-        
-        console.log(this.state.imageUrls);
       })
       .catch((error) => {
         if (error.response.status === 401) {
