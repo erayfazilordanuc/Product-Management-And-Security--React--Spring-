@@ -7,8 +7,8 @@ export default class LoginForm extends React.Component {
         super(props);
         this.state = {
             active: "login",
-            firstName: "",
-            lastName: "",
+            name: "",
+            surname: "",
             username: "",
             password: "",
             email: "",
@@ -35,8 +35,8 @@ export default class LoginForm extends React.Component {
   
     onSubmitRegister = (e) => {
       e.preventDefault();
-      const { firstName, lastName, username, password, email } = this.state;
-      if (!firstName || !lastName || !username || !password || !email) {
+      const { name, surname, username, password, email } = this.state;
+      if (!name || !surname || !username || !password || !email) {
           alert("Please fill in all fields");
           return;
       }
@@ -44,7 +44,7 @@ export default class LoginForm extends React.Component {
         alert("Please enter a valid email");
         return;
       }
-      this.state.onRegister(e, firstName, lastName, username, password, email);
+      this.state.onRegister(e, name, surname, username, password, email);
     };  
 
     backHome = () => {
@@ -89,13 +89,13 @@ export default class LoginForm extends React.Component {
                 <form onSubmit={this.onSubmitRegister}>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="firstName">Name</label>
-                    <input type="text" id="firstName" name="firstName" className="form-control" onChange={this.onChangeHandler}/>
+                    <label className="form-label" htmlFor="name">Name</label>
+                    <input type="text" id="name" name="name" className="form-control" onChange={this.onChangeHandler}/>
                   </div>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="lastName">Surname</label>
-                    <input type="text" id="lastName" name="lastName" className="form-control" onChange={this.onChangeHandler}/>
+                    <label className="form-label" htmlFor="surname">Surname</label>
+                    <input type="text" id="surname" name="surname" className="form-control" onChange={this.onChangeHandler}/>
                   </div>
 
                   <div className="form-outline mb-4">

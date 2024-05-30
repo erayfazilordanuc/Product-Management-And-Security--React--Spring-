@@ -382,8 +382,8 @@ export default class MainPage extends React.Component {
               <h5 className="mt-3">Account</h5>
               <div className='mt-3'>
                 <div>
-                  <p className='mt-2' >Name : {this.state.accountInfo.firstName}</p>
-                  <p>Surname : {this.state.accountInfo.lastName}</p>
+                  <p className='mt-2' >Name : {this.state.accountInfo.name}</p>
+                  <p>Surname : {this.state.accountInfo.surname}</p>
                   <p>Username : {this.state.accountInfo.username}</p>
                   <p>Email : {this.state.accountInfo.email}</p>
                   <p>Id : {this.state.accountInfo.id}</p>
@@ -411,6 +411,8 @@ export default class MainPage extends React.Component {
                           <option value='default'>Default</option>
                           <option value='increasingCost'>Increasing cost</option>
                           <option value='decreasingCost'>Decreasing cost</option>
+                          {/* <option value='aToZ'>Alphabetical</option>
+                          <option value='zToA'>Reverse Alphabetical</option> */}
                       </select>
                   </div>
                 </div>
@@ -520,8 +522,8 @@ export default class MainPage extends React.Component {
                         <option value='default'>Default</option>
                         <option value='increasingCost'>Increasing cost</option>
                         <option value='decreasingCost'>Decreasing cost</option>
-                        <option value='aToZ'>Alphabetical</option>
-                        <option value='zToA'>Reverse Alphabetical</option>
+                        {/* <option value='aToZ'>Alphabetical</option>
+                        <option value='zToA'>Reverse Alphabetical</option> */}
                     </select>
                 </div>
               </div>

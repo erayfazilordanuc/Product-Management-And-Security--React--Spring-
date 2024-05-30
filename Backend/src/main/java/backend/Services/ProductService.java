@@ -21,8 +21,6 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 @Service
 public class ProductService {
-
-    private final UserRepo userRepo;
     
     private final ProductRepo productRepo;
 

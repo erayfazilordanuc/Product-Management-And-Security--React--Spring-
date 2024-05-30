@@ -12,8 +12,8 @@ import lombok.Builder;
 public class UserDTO {
     
     private int id;
-    private String firstName;
-    private String lastName;
+    private String name;
+    private String surname;
     private String username;
     private String token;
     private String email;

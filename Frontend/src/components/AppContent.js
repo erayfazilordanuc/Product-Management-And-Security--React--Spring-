@@ -26,8 +26,8 @@ export default class AppContent extends React.Component {
         this.setState({ userCode: code }, () => {
             if (this.state.userCode == this.state.authCode) {
                 if (this.state.registerData) {
-                    const { firstName, lastName, username, password, email } = this.state.registerData;
-                    this.registerRequest(firstName, lastName, username, password, email);
+                    const { name, surname, username, password, email } = this.state.registerData;
+                    this.registerRequest(name, surname, username, password, email);
                 } else {
                     this.loginRequest(this.state.tempUsername, this.state.tempPassword);
                 }
@@ -57,7 +57,10 @@ export default class AppContent extends React.Component {
             }).then(
             (response) => {
                 setAuthHeader(response.data.token);
-                this.setState({ userId: response.data.id });
+                // this.setState({ userId: response.data.id });
+                // setTimeout(() => {
+                //     window.location.href = "/main";
+                // }, 1000); 
                 window.location.href = "/main";
                 this.errorMessage = "";
             }).catch(
@@ -70,13 +73,13 @@ export default class AppContent extends React.Component {
         );
     }
 
-    registerRequest = (firstName, lastName, username, password, email) => {
+    registerRequest = (name, surname, username, password, email) => {
         request(
             "POST",
             "/user/register",
             {
-                firstName: firstName,
-                lastName: lastName,
+                name: name,
+                surname: surname,
                 username: username,
                 password: password,
                 email: email
@@ -123,9 +126,9 @@ export default class AppContent extends React.Component {
         });
     };
 
-    onRegister = (event, firstName, lastName, username, password, email) => {
+    onRegister = (event, name, surname, username, password, email) => {
         event.preventDefault();
-        this.setState({ registerData: { firstName, lastName, username, password, email } }, () => {
+        this.setState({ registerData: { name, surname, username, password, email } }, () => {
             this.sendCode(username, email);
             this.setState({ componentToShow: ["login", "code"] });
         });

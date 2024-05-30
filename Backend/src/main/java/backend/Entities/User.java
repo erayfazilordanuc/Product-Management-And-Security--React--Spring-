@@ -19,13 +19,13 @@ public class User {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
 
-    @Column(name = "first_name", nullable = false)
+    @Column(name = "name", nullable = false)
     @Size(max = 100)
-    private String firstName;
+    private String name;
 
-    @Column(name = "last_name", nullable = false)
+    @Column(name = "surname", nullable = false)
     @Size(max = 100)
-    private String lastName;
+    private String surname;
 
     @Column(nullable = false)
     @Size(max = 100)
