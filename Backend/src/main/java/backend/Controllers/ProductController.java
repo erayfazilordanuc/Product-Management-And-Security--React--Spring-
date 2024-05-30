@@ -22,7 +22,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.multipart.MultipartFile;
 
-import backend.DTOs.LimitedDto;
+import backend.DTOs.LimitedProductDto;
 import backend.DTOs.ProductDTO;
 import backend.Entities.Product;
 import backend.Services.ProductService;
@@ -62,11 +62,11 @@ public class ProductController { // Girişten sonraki işlemleri yönetmeyi sağ
     }
 
     @GetMapping("/limitedListAll")
-    public ResponseEntity<List<LimitedDto>> limitedAllProducts(){
-        List<LimitedDto> info = new ArrayList<>();
+    public ResponseEntity<List<LimitedProductDto>> limitedAllProducts(){
+        List<LimitedProductDto> info = new ArrayList<>();
         List<Product> allProducts = productService.listAll();
         for(int i=0; i<allProducts.size(); i++){
-            LimitedDto temp = new LimitedDto();
+            LimitedProductDto temp = new LimitedProductDto();
             temp.setName(allProducts.get(i).getName());
             temp.setBrand(allProducts.get(i).getBrand());
             temp.setId(allProducts.get(i).getId());

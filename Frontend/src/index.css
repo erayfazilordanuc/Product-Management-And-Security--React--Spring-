@@ -1,17 +1,10 @@
-/* body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-} */
-
+/*Normal site css*/
 body {
   /* display: flex; */
   overflow-x: hidden;
   justify-content: center;
   align-items: center;
+  user-select: none; /*Değiştirilebilir*/
 }
 
 code {
@@ -34,13 +27,17 @@ header h4 {
   font-size: 27px;
 }
 
+select:hover{
+  cursor: pointer;
+}
+
 footer {
   position: fixed;
   bottom: 0;
   left: 0;
   width: 100%;
-  background-color: #77e29e; /* Footer arka plan rengi */
-  color: #353535; /* Footer metin rengi */
+  background-color: #77e29e;
+  color: #353535;
   padding-top: 0px;
   margin-bottom: -7px;
 }
@@ -63,28 +60,99 @@ table {
 }
 
 
-/* html, body {
-  height: 100%;
+
+/* body {
   margin: 0;
-  display:flex;
-  justify-content: center;
-  align-items: center;
+  padding: 0;
+  font-family: Arial, sans-serif;
 }
 
 .container {
+  padding: 0 15px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.table-responsive {
+  display: block;
   width: 100%;
-  max-width: 800px;
-  padding: 50px;
-  border: 1px solid #ccc;
-  border-radius: 8px;
-  background-color: #fff;
-  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
 }
 
-.container .nav {
-  margin-bottom: 20px;
+.table-light {
+  width: 100%;
+  margin-bottom: 1rem;
+  color: #212529;
 }
 
-.container .form-outline {
-  margin-bottom: 15px;
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 0;
+}
+
+main {
+  margin-top: 20px;
+}
+
+button {
+  margin: 5px 0;
+}
+
+@media (max-width: 768px) {
+  .container {
+    margin-left: 10px;
+    margin-right: 10px;
+  }
+
+  .table-light thead {
+    display: none;
+  }
+
+  .table-light, .table-light tbody, .table-light tr, .table-light td {
+    display: block;
+    width: 100%;
+  }
+
+  .table-light tr {
+    margin-bottom: 15px;
+  }
+
+  .table-light td {
+    text-align: right;
+    padding-left: 50%;
+    position: relative;
+  }
+
+  .table-light td::before {
+    content: attr(data-label);
+    position: absolute;
+    left: 0;
+    width: 45%;
+    padding-left: 15px;
+    font-weight: bold;
+    text-align: left;
+  }
+}
+
+@media (max-width: 576px) {
+  header {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    margin-bottom: 10px;
+  }
+
+  .form-control, .form-select {
+    width: 100%;
+  }
 } */

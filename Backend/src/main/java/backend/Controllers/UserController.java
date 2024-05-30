@@ -27,13 +27,12 @@ import lombok.RequiredArgsConstructor;
 
 @RequiredArgsConstructor
 @RestController
-@RequestMapping("/auth")
-public class AuthController { // Login ve register aşamalarını yöneten controller
+@RequestMapping("/user")
+public class UserController { // Login ve register aşamalarını yöneten controller
 
     private final UserService userService;
     private final JWTService jwtService;
     private final MailService mailService;
-    private final UserRepo userRepo;
     
     @PostMapping("/login")
     public ResponseEntity<UserDTO> login(@RequestBody @Valid MemberDTO memberDto) throws Exception {
@@ -87,8 +86,13 @@ public class AuthController { // Login ve register aşamalarını yöneten contr
     }
 
     @PostMapping("/getUserId")
-    public ResponseEntity<Integer> userProducts(@RequestBody String username) throws Exception{
+    public ResponseEntity<Integer> getUserId(@RequestBody String username) throws Exception{
         return ResponseEntity.ok(userService.findByUsername(username).getId());
+    }
+
+    @PostMapping("/getUserInfo")
+    public ResponseEntity<UserDTO> getUserInfo(@RequestBody int id) {
+        return ResponseEntity.ok(userService.getUserInfo(id));
     }
 
 }

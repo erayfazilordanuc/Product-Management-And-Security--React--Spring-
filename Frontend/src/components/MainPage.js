@@ -18,26 +18,41 @@ export default class MainPage extends React.Component {
       data: [],
       userProductsData: [],
       allProdsShowing: null,
-      showAllProducts: false,
+      showAllProducts: true,
       editingProductId: null,
       showingProductId: null,
       addingProduct: false,
       isLoading: true,
       imageUrls: {},
-      myProducts: false
+      myProducts: false,
+      accountInfoPanel: false,
+      sortOrder: 'default',
+      mySortOrder: 'default',
+      allDefaultData: null,
+      myDefaultData: null,
+      userInfo: {}
     };
     this.productRefs = {};
   }
 
   componentDidMount() {
     this.fetchData();
+    this.getAccountInfo();
+  }
+
+  async getAccountInfo() {
+
   }
 
   async fetchData() {
     try {
       const decoded = jwt.decode(getAuthToken());
-      const response = await request('POST', '/auth/getUserId', decoded.sub);
-      this.setState({ passedUserId: response.data });
+      const response = await request('POST', '/user/getUserId', decoded.sub);
+      const userId = response.data;
+      this.setState({ passedUserId: userId });
+
+      const getAccountInfo = await request('POST', '/user/getUserInfo', userId);
+      this.setState({accountInfo: getAccountInfo.data});
 
       const productListResponse = await request('GET', '/products/listAll', {});
       const userProductsData = this.state.passedUserId
@@ -122,8 +137,10 @@ export default class MainPage extends React.Component {
       showAllProducts: !prevState.showAllProducts // showAllProduct değerini öncekinin tersi yap
     }), () => {
       if(this.state.showAllProducts){
-        const showAllProdButton = document.getElementById('showAllProdsButton');
-        showAllProdButton.scrollIntoView({behavior: 'smooth', block: 'start'});
+        const element = document.getElementById('addButton');
+          if (element) {
+            element.scrollIntoView({block: "start"});
+          }
       }
     });
   }
@@ -176,8 +193,100 @@ export default class MainPage extends React.Component {
     }
   };  
 
-  render() {
+  onAddCancel = () => {
+    this.setState({ addingProduct: false });
+    window.scroll(0, 0);
+  }
 
+  onAllShowClose = (productId) => {
+    this.setState({allProdsShowing: null}, () => {
+      const element = document.getElementById(`allProdsRow${productId}`);
+        if (element) {
+          element.scrollIntoView({block: "center"});
+        }
+    });
+  }
+
+  onMyShowClose = (productId) => {
+    this.setState({showingProductId: null}, () => {
+      const element = document.getElementById(`myProdsRow${productId}`);
+        if (element) {
+          element.scrollIntoView({block: "center"});
+        }
+    });
+  }
+
+  onEditCancel = (productId) => {
+    this.setState({ editingProductId: null }, () => {
+      const element = document.getElementById(`myProdsRow${productId}`);
+        if (element) {
+          element.scrollIntoView({block: "center"});
+        }
+    })
+  }
+
+  sortChange = (event) => {
+    this.setState({sortOrder: event.target.value}, this.sortProducts);
+  }
+
+  mySortChange = (event) => {
+    this.setState({mySortOrder: event.target.value}, this.sortMyProducts);
+  }
+
+  sortProducts= () => {
+    const {data, sortOrder} = this.state;
+    let sortedData = [...data];
+
+    if(!this.state.allDefaultData){
+      this.setState({allDefaultData: data});
+    }
+
+    if(sortOrder === 'increasingCost') {
+      sortedData.sort((a, b) => a.price - b.price);
+    }else if(sortOrder === 'decreasingCost') {
+      sortedData.sort((a, b) => b.price - a.price);
+    }else if(sortOrder === 'default') {
+      sortedData = this.state.allDefaultData;
+    }
+
+    this.setState({data: sortedData});
+  }
+
+  sortMyProducts= () => {
+    const {userProductsData, mySortOrder} = this.state;
+    let sortedData = [...userProductsData];
+
+    if(!this.state.myDefaultData){
+      this.setState({myDefaultData: userProductsData});
+    }
+
+    if(mySortOrder === 'increasingCost') {
+      sortedData.sort((a, b) => a.price - b.price);
+    }else if(mySortOrder === 'decreasingCost') {
+      sortedData.sort((a, b) => b.price - a.price);
+    }else if(mySortOrder === 'default') {
+      sortedData = this.state.myDefaultData;
+    }
+
+    this.setState({userProductsData: sortedData});
+  }
+
+  accountInfo = () => {
+    this.setState(prevState => ({ accountInfoPanel: !prevState.accountInfoPanel }), () => {
+      if(this.state.accountInfoPanel){
+        window.scroll(0, 0);
+      }
+    });
+  }
+
+  search = (event) => {
+    const searchInput = document.getElementById('searchInput');
+    if(event.key === 'Enter'){
+      console.log(searchInput.value);
+    }
+  }
+
+  render() {
     if (this.state.isLoading) {
       return <div className='mt-5'>Loading...</div>;
     }
@@ -185,18 +294,49 @@ export default class MainPage extends React.Component {
     return (
       <div style={{marginLeft: '250px', marginRight:'250px'}}>
         <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <h4 style={{textAlign: 'left', marginLeft: '5px'}}>Product Store</h4>
-          <button className='btn btn-danger mt-1 mb-1 mx-1' onClick={this.logout}>Logout</button>
+          <h4 style={{marginLeft: '5px'}}>Product Store</h4>
+          <div>
+            <button className='btn btn-light mt-1 mb-1 mx-1' onClick={this.accountInfo}>Account Info</button>
+            <button className='btn btn-danger mt-1 mb-1 mx-1' onClick={this.logout}>Logout</button>
+          </div>
         </header>
 
         <main>
-          <div id='myProds' className="container mb-5" style={{marginTop: '45px'}}>
-            <button className={`btn ${this.state.myProducts ? 'btn-secondary' : 'btn-info'} mb-3 mt-3`} onClick={this.myProds}>
+          {/* Account Info */}
+          <span>ㅤㅤㅤㅤㅤㅤ</span>
+          {this.state.accountInfoPanel && (
+            <div>
+              <div style={{marginTop: '45px'}}>
+                <p>{this.state.accountInfo.id}</p>
+                <p>{this.state.accountInfo.username}</p>
+                <p>{this.state.accountInfo.firstName}</p>
+                <p>{this.state.accountInfo.lastName}</p>
+                <p>{this.state.accountInfo.email}</p>
+              </div>
+            </div>
+          )}
+
+          {/* My Products */}
+          <div className="container mb-3" style={{marginTop: '38px'}}>
+            <button className={`btn ${this.state.myProducts ? 'btn-secondary' : 'btn-info'} mb-3`} onClick={this.myProds}>
             {this.state.myProducts ? 'Hide My Products' : 'Show My Products'}
             </button>
             {this.state.myProducts && (
               <div>
-              <h4 className="mt-1 mb-3">Your Products</h4>
+                <h5 className="mb-3">My Products</h5>
+                <div className='mb-3' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                  <div className='mb-2'>
+                      <input onKeyDown={this.search} id="searchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
+                  </div>
+                  <div className='col-sm-2'>
+                    <label>Sort by</label>
+                      <select onChange={this.mySortChange}className='form-select mt-1'>
+                          <option value='default'>Default</option>
+                          <option value='increasingCost'>Increasing cost</option>
+                          <option value='decreasingCost'>Decreasing cost</option>
+                      </select>
+                  </div>
+                </div>
               {this.state.userProductsData.length > 0 ? (
                 <table className='table table-light'>
                   <thead>
@@ -215,8 +355,8 @@ export default class MainPage extends React.Component {
                   <tbody>
                     {this.state.userProductsData.map((product) => ( 
                       <React.Fragment key={product.id}>
-                        <tr className={this.state.editingProductId === product.id ? 'table-dark' : ''}>
-                          <td onClick={() => this.show(product)}>{product.brand}</td>
+                        <tr id={`myProdsRow${product.id}`} className={this.state.editingProductId === product.id ? 'table-dark' : ''}>
+                          <td onClick={() => this.show(product, true)}>{product.brand}</td>
                           <td onClick={() => this.show(product, true)}>{product.name}</td>
                           {/* <td onClick={() => this.show(product, true)}>{product.description}</td> */}
                           <td onClick={() => this.show(product, true)}>{product.color}</td>
@@ -237,7 +377,7 @@ export default class MainPage extends React.Component {
                             <td style={{backgroundColor: '#f6f6f6'}} id={`showProduct${this.state.showingProductId}`} colSpan="7">
                               <ShowPanel
                                 dataToShow={this.state.dataToShow}
-                                onClose={() => this.setState({ showingProductId: null })}
+                                onClose={this.onMyShowClose}
                               />
                             </td>
                           </tr>
@@ -251,7 +391,7 @@ export default class MainPage extends React.Component {
                                 onSave={this.onSave}
                                 dataToEdit={this.state.dataToEdit}
                                 productId={product.id}
-                                onCancel={() => this.setState({ editingProductId: null })} // Edit ekranını kapatmak için fonksiyon
+                                onCancel={this.onEditCancel} // Edit ekranını kapatmak için fonksiyon
                               />
                             </td>
                           </tr>                         
@@ -266,7 +406,7 @@ export default class MainPage extends React.Component {
               </div>
             )}
             <div>
-              <button id='addButton' className='btn btn-success mb-3' onClick={this.onAdd}>
+              <button id='addButton' className='btn btn-success' onClick={this.onAdd}>
                 Add Product
               </button>
               {this.state.addingProduct && (
@@ -275,74 +415,87 @@ export default class MainPage extends React.Component {
                     onUploadImage={this.onUploadImage}
                     userId={this.state.passedUserId ||this.state.userId}
                     onSave={this.onSave}
-                    onCancel={() => this.setState({ addingProduct: false })}
+                    onCancel={this.onAddCancel}
                   />
                 </div>
               )}
             </div>
-            <button 
-              id='showAllProdsButton'
-              className={`btn ${this.state.showAllProducts ? 'btn-secondary' : 'btn-primary'} mb-3`}
-              onClick={this.toggleAllProducts}
-            >
-              {this.state.showAllProducts ? 'Hide All Products' : 'Show All Products'}
-            </button>
-            {this.state.showAllProducts && (
-              <div>
-                {this.state.data.length > 0 ? (
-                  <table className='table table-light'>
-                    <thead>
-                      <tr>
-                        <th>Brand</th>
-                        <th>Name</th>
-                        {/* <th>Description</th> */}
-                        <th>Color</th>
-                        <th>Information</th>
-                        <th>Price</th>
-                        <th>Image</th>
-                        {/* <th>Owner ID</th> */}
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {this.state.data.map((product) => (
-                        <React.Fragment key={product.id}> {/* Ürün gösterme paneli hemen ürünün altında çıksın */}
-                          <tr onClick={() => this.show(product, false)}>
-                            <td>{product.brand}</td>
-                            <td>{product.name}</td>
-                            {/* <td>{product.description}</td> */}
-                            <td>{product.color}</td>
-                            <td>{product.information}</td>
-                            <td>{product.price} $</td>
-                            <td>
-                              <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
-                            </td>
-                            {/* <td>{product.ownerId}</td> */}
-                          </tr>
-                          {this.state.allProdsShowing === product.id && (
-                            <tr>
-                              <td style={{backgroundColor: '#f6f6f6'}} id={`showAllProduct${this.state.allProdsShowing}`} colSpan="7">
-                                <ShowPanel
-                                  dataToShow={this.state.allProdsDataToShow}
-                                  onClose={() => this.setState({ allProdsShowing: null })}
-                                />
-                              </td>
-                            </tr>
-                          )}
-                        </React.Fragment>
-                      ))}
-                    </tbody>
-                  </table>
-                ) : (
-                  <p>No products available</p>
-                )}
-              </div>
-            )}
           </div>
-        </main>
 
-        {/* <footer>
-          <h6>Product Store &copy; 2024</h6>
-        </footer> */}
+          {/* All Products */}
+          <button
+            className={`btn ${this.state.showAllProducts ? 'btn-secondary' : 'btn-primary'} mb-3`}
+            onClick={this.toggleAllProducts}
+          >
+            {this.state.showAllProducts ? 'Hide All Products' : 'Show All Products'}
+          </button>
+          {this.state.showAllProducts && (
+            <div>
+            <h5 className="mb-3">All Products</h5>
+              <div className='mb-3' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
+                <div className='mb-2'>
+                    <input onKeyDown={this.search} id="searchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
+                </div>
+                <div className='col-sm-3'>
+                  <label>Sort by</label>
+                    <select onChange={this.sortChange}className='form-select mt-1'>
+                        <option value='default'>Default</option>
+                        <option value='increasingCost'>Increasing cost</option>
+                        <option value='decreasingCost'>Decreasing cost</option>
+                        <option value='aToZ'>Alphabetical</option>
+                        <option value='zToA'>Reverse Alphabetical</option>
+                    </select>
+                </div>
+              </div>
+              {this.state.data.length > 0 ? (
+                <table className='table table-light'>
+                  <thead>
+                    <tr>
+                      <th>Brand</th>
+                      <th>Name</th>
+                      {/* <th>Description</th> */}
+                      <th>Color</th>
+                      <th>Information</th>
+                      <th>Price</th>
+                      <th>Image</th>
+                      {/* <th>Owner ID</th> */}
+                    </tr>
+                  </thead>
+                  <tbody>
+                    {this.state.data.map((product) => (
+                      <React.Fragment key={product.id}> {/* Ürün gösterme paneli hemen ürünün altında çıksın */}
+                        <tr id={`allProdsRow${product.id}`} onClick={() => this.show(product, false)}>
+                          <td>{product.brand}</td>
+                          <td>{product.name}</td>
+                          {/* <td>{product.description}</td> */}
+                          <td>{product.color}</td>
+                          <td>{product.information}</td>
+                          <td>{product.price} $</td>
+                          <td>
+                            <img style={{width: "175px", backgroundColor: "white"}} src={this.state.imageUrls[product.id]} alt="Product Image"/>
+                          </td>
+                          {/* <td>{product.ownerId}</td> */}
+                        </tr>
+                        {this.state.allProdsShowing === product.id && (
+                          <tr>
+                            <td style={{backgroundColor: '#f6f6f6'}} id={`showAllProduct${this.state.allProdsShowing}`} colSpan="7">
+                              <ShowPanel
+                                dataToShow={this.state.allProdsDataToShow}
+                                onClose={this.onAllShowClose}
+                              />
+                            </td>
+                          </tr>
+                        )}
+                      </React.Fragment>
+                    ))}
+                  </tbody>
+                </table>
+              ) : (
+                <p>No products available</p>
+              )}
+            </div>
+          )}
+        </main>
       </div>
     );
   }

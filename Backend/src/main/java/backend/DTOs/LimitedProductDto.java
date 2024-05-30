@@ -5,7 +5,7 @@ import org.springframework.core.io.Resource;
 import lombok.Data;
 
 @Data
-public class LimitedDto {
+public class LimitedProductDto {
 
     private int id;
     

@@ -34,7 +34,7 @@ function EditPanel(props) {
   };
 
   const onCancel = () => {
-    props.onCancel();
+    props.onCancel(props.dataToEdit.id);
   };
 
   const onDelete = () => {

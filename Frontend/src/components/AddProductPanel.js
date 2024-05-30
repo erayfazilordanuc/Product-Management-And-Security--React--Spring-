@@ -20,6 +20,10 @@ function AddProductPanel(props) {
       alert('Please fill in all fields');
       return; // Eğer bir input boşsa işlemi sonlandır
     }
+    if(!selectedFile){
+      alert('Please add an image');
+      return;
+    }
     props.onSave(dataToAdd);
     setTimeout(() => {
       props.onUploadImage(selectedFile, -1); // Son kaydedilen ürünün id'sine göre resimleri adlandırdığı için son ürün kaydedilene kadar beklemesi lazım

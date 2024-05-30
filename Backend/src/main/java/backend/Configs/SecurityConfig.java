@@ -30,14 +30,13 @@ public class SecurityConfig { // Adresleri filtreler
                 .sessionManagement().sessionCreationPolicy(SessionCreationPolicy.STATELESS)
                 .and()
                 .authorizeHttpRequests((requests) -> requests
-                        .requestMatchers("/auth/**").permitAll()
-                        .requestMatchers("/products/limitedListAll").permitAll() // /login ve /register adreslerine herkes ulaşabilir
-                        .requestMatchers("/products/edit").permitAll()   
-                        .requestMatchers("/auth/sendCode").permitAll()  
-                        .requestMatchers("/products/getImage").permitAll()     // fakat geri kalanlarına ulaşmaları için doğrulanmaları lazım
-                        .requestMatchers("/auth/getUserId").authenticated() // warning
+                        .requestMatchers("/user/login").permitAll()
+                        .requestMatchers("/user/register").permitAll()
+                        .requestMatchers("/user/sendCode").permitAll()
+                        .requestMatchers("/products/limitedListAll").permitAll() 
+                        .requestMatchers("/products/getImage").permitAll()
                         .anyRequest().authenticated())                        
-                        // hasRole() ya da hasAuthority() ekle
+                        // hasRole() ya da hasAuthority() eklenebilir
         ;
         return http.build();
     }

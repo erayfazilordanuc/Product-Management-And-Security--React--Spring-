@@ -64,4 +64,15 @@ public class UserService { // UserRepo kullanarak user için gerekli işlemleri 
         return userMapper.toUserDto(user);
     }
 
+    public UserDTO getUserInfo(int id){
+        UserDTO dtoToSend = new UserDTO();
+        User user = userRepo.findById(id).get();
+        dtoToSend.setFirstName(user.getFirstName());
+        dtoToSend.setLastName(user.getLastName());
+        dtoToSend.setUsername(user.getUsername());
+        dtoToSend.setEmail(user.getEmail());
+        dtoToSend.setId(id);
+        return dtoToSend;
+    }
+
 }

@@ -5,7 +5,7 @@ function ShowPanel(props) {
   const [imageUrls, setImageUrls] = useState({});
 
   const close = () => {
-    props.onClose();
+    props.onClose(props.dataToShow.id);
   };
 
   useEffect(() => {
@@ -32,7 +32,7 @@ function ShowPanel(props) {
           <p>Information : {props.dataToShow.information}</p>
           <p>Price : {props.dataToShow.price} $</p>
           <p>Dealer Id : {props.dataToShow.ownerId}</p> {/*Buraya satıcının idsi yerine ismi gelecek*/}
-          <div><img className="mt-3" src={imageUrls[props.dataToShow.id]} alt="Product" style={{width: "500px"}}/></div>
+          <div><img className="mt-3" src={imageUrls[props.dataToShow.id]} alt="Product" style={{width: "450px"}}/></div>
           <button className='btn btn-secondary mt-4' onClick={close}>Close</button>
         </div>
       )}

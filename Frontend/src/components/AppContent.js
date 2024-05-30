@@ -50,7 +50,7 @@ export default class AppContent extends React.Component {
     loginRequest = (username, password) => {
         request(
             "POST",
-            "/auth/login",
+            "/user/login",
             {
                 username: username,
                 password: password
@@ -73,7 +73,7 @@ export default class AppContent extends React.Component {
     registerRequest = (firstName, lastName, username, password, email) => {
         request(
             "POST",
-            "/auth/register",
+            "/user/register",
             {
                 firstName: firstName,
                 lastName: lastName,
@@ -102,7 +102,7 @@ export default class AppContent extends React.Component {
         const secureCode = (randomCode*(15)+23)*610;
         request(
             "POST",
-            "/auth/sendCode",
+            "/user/sendCode",
             {
                 username: username,
                 code: secureCode,
