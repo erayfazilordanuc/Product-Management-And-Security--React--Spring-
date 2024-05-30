@@ -12,7 +12,7 @@ export default class MainPage extends React.Component {
     this.state = {
       dataToEdit:[],
       dataToShow:[],
-      allProdsDataToShow: [],
+      allProdsDataToShow: null,
       userId: this.props.userId,
       passedUserId: null,
       data: [],
@@ -30,7 +30,9 @@ export default class MainPage extends React.Component {
       mySortOrder: 'default',
       allDefaultData: null,
       myDefaultData: null,
-      userInfo: {}
+      userInfo: {},
+      myLastDataState: [],
+      allLastDataState: []
     };
     this.productRefs = {};
   }
@@ -127,12 +129,18 @@ export default class MainPage extends React.Component {
   }
 
   myProds = () => {
+    if(this.state.myDefaultData){
+      this.setState({userProductsData: this.state.myDefaultData});
+    }
     this.setState((prevState) => ({
       myProducts: !prevState.myProducts // showAllProduct değerini öncekinin tersi yap
     }));
   }
 
   toggleAllProducts = () => {
+    if(this.state.allDefaultData){
+      this.setState({data: this.state.allDefaultData});
+    }
     this.setState((prevState) => ({
       showAllProducts: !prevState.showAllProducts // showAllProduct değerini öncekinin tersi yap
     }), () => {
@@ -233,8 +241,8 @@ export default class MainPage extends React.Component {
     this.setState({mySortOrder: event.target.value}, this.sortMyProducts);
   }
 
-  sortProducts= () => {
-    const {data, sortOrder} = this.state;
+  sortProducts = async () => {
+    const {data, sortOrder, allLastDataState} = this.state;
     let sortedData = [...data];
 
     if(!this.state.allDefaultData){
@@ -246,14 +254,22 @@ export default class MainPage extends React.Component {
     }else if(sortOrder === 'decreasingCost') {
       sortedData.sort((a, b) => b.price - a.price);
     }else if(sortOrder === 'default') {
-      sortedData = this.state.allDefaultData;
+      if(document.getElementById('allSearchInput').value === ''){
+        sortedData = this.state.allDefaultData; 
+      }else{
+        if(allLastDataState){
+          sortedData = this.state.allLastDataState; 
+        }else{
+          sortedData = this.state.allDefaultData;
+        }
+      }
     }
 
     this.setState({data: sortedData});
   }
 
-  sortMyProducts= () => {
-    const {userProductsData, mySortOrder} = this.state;
+  sortMyProducts = async () => {
+    const {userProductsData, mySortOrder, myLastDataState} = this.state;
     let sortedData = [...userProductsData];
 
     if(!this.state.myDefaultData){
@@ -265,7 +281,15 @@ export default class MainPage extends React.Component {
     }else if(mySortOrder === 'decreasingCost') {
       sortedData.sort((a, b) => b.price - a.price);
     }else if(mySortOrder === 'default') {
-      sortedData = this.state.myDefaultData;
+      if(document.getElementById('mySearchInput').value === ''){
+        sortedData = this.state.myDefaultData; 
+      }else{
+        if(myLastDataState){
+          sortedData = this.state.myLastDataState; 
+        }else{
+          sortedData = this.state.myDefaultData;
+        }
+      }
     }
 
     this.setState({userProductsData: sortedData});
@@ -279,11 +303,60 @@ export default class MainPage extends React.Component {
     });
   }
 
-  search = (event) => {
-    const searchInput = document.getElementById('searchInput');
+  mySearch = async (event) => {
+    const searchInput = document.getElementById('mySearchInput');
+    const input = searchInput.value.toLowerCase();
     if(event.key === 'Enter'){
-      console.log(searchInput.value);
+      let searchedResults = [];
+      if(this.state.myDefaultData){
+        searchedResults = this.state.myDefaultData.filter(product => {
+          const combinedString = `${product.brand} ${product.name} ${product.color} ${product.information} ${product.price}`.toLowerCase();
+          return combinedString.includes(input);})
+      }else{
+        searchedResults = this.state.userProductsData.filter(product => {
+          const combinedString = `${product.brand} ${product.name} ${product.color} ${product.information} ${product.price}`.toLowerCase();
+          return combinedString.includes(input);
+        });
+        this.setState({myDefaultData: this.state.userProductsData});
+      }
+      this.setState({myLastDataState: searchedResults});
+      this.setState({userProductsData: searchedResults}); 
     }
+  }
+
+  allSearch = async (event) => {
+    const searchInput = document.getElementById('allSearchInput');
+    const input = searchInput.value.toLowerCase();
+    if(event.key === 'Enter'){
+      let searchedResults = [];
+      if(this.state.allDefaultData){
+        searchedResults = this.state.allDefaultData.filter(product => {
+          const combinedString = `${product.brand} ${product.name} ${product.color} ${product.information} ${product.price}`.toLowerCase();
+          return combinedString.includes(input);})
+      }else{
+        searchedResults = this.state.data.filter(product => {
+          const combinedString = `${product.brand} ${product.name} ${product.color} ${product.information} ${product.price}`.toLowerCase();
+          return combinedString.includes(input);
+        });
+        this.setState({allDefaultData: this.state.data});
+      }
+      this.setState({allLastDataState: searchedResults});
+      this.setState({data: searchedResults}); 
+    }
+  }
+
+  clearMySearch = () => {
+    if(this.state.myDefaultData){
+      this.setState({userProductsData: this.state.myDefaultData});
+    }
+    document.getElementById('mySearchInput').value = '';
+  }
+
+  clearAllSearch = () => {
+    if(this.state.allDefaultData){
+      this.setState({data: this.state.allDefaultData});
+    }
+    document.getElementById('allSearchInput').value = '';
   }
 
   render() {
@@ -296,8 +369,8 @@ export default class MainPage extends React.Component {
         <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
           <h4 style={{marginLeft: '5px'}}>Product Store</h4>
           <div>
-            <button className='btn btn-light mt-1 mb-1 mx-1' onClick={this.accountInfo}>Account Info</button>
-            <button className='btn btn-danger mt-1 mb-1 mx-1' onClick={this.logout}>Logout</button>
+            <button className='btn btn-light mt-1 mb-1' onClick={this.accountInfo}>Account Info</button>
+            <button className='btn btn-danger mt-1 mb-1 mx-2' onClick={this.logout}>Logout</button>
           </div>
         </header>
 
@@ -305,13 +378,16 @@ export default class MainPage extends React.Component {
           {/* Account Info */}
           <span>ㅤㅤㅤㅤㅤㅤ</span>
           {this.state.accountInfoPanel && (
-            <div>
-              <div style={{marginTop: '45px'}}>
-                <p>{this.state.accountInfo.id}</p>
-                <p>{this.state.accountInfo.username}</p>
-                <p>{this.state.accountInfo.firstName}</p>
-                <p>{this.state.accountInfo.lastName}</p>
-                <p>{this.state.accountInfo.email}</p>
+            <div className='border' style={{marginBottom: '-30px', marginTop: '30px', backgroundColor: '#f6f6f6', width: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
+              <h5 className="mt-3">Account</h5>
+              <div className='mt-3'>
+                <div>
+                  <p className='mt-2' >Name : {this.state.accountInfo.firstName}</p>
+                  <p>Surname : {this.state.accountInfo.lastName}</p>
+                  <p>Username : {this.state.accountInfo.username}</p>
+                  <p>Email : {this.state.accountInfo.email}</p>
+                  <p>Id : {this.state.accountInfo.id}</p>
+                </div>
               </div>
             </div>
           )}
@@ -325,8 +401,9 @@ export default class MainPage extends React.Component {
               <div>
                 <h5 className="mb-3">My Products</h5>
                 <div className='mb-3' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                  <div className='mb-2'>
-                      <input onKeyDown={this.search} id="searchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
+                  <div className='mb-2' style={{ display: 'flex', alignItems: 'center' }}>
+                      <input onKeyDown={this.mySearch} id="mySearchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
+                      <button className='btn btn-success mx-1' onClick={this.clearMySearch}>Clear</button>
                   </div>
                   <div className='col-sm-2'>
                     <label>Sort by</label>
@@ -401,7 +478,7 @@ export default class MainPage extends React.Component {
                   </tbody>
                 </table>
               ) : (
-                <p>You haven't added a product yet</p>
+                <p>No products</p>
               )}
               </div>
             )}
@@ -433,9 +510,10 @@ export default class MainPage extends React.Component {
             <div>
             <h5 className="mb-3">All Products</h5>
               <div className='mb-3' style={{display: 'flex', flexDirection: 'column', alignItems: 'center'}}>
-                <div className='mb-2'>
-                    <input onKeyDown={this.search} id="searchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
-                </div>
+                <div className='mb-2' style={{ display: 'flex', alignItems: 'center' }}>
+                      <input onKeyDown={this.allSearch} id="allSearchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
+                      <button className='btn btn-success mx-1' onClick={this.clearAllSearch}>Clear</button>
+                  </div>
                 <div className='col-sm-3'>
                   <label>Sort by</label>
                     <select onChange={this.sortChange}className='form-select mt-1'>
@@ -491,7 +569,7 @@ export default class MainPage extends React.Component {
                   </tbody>
                 </table>
               ) : (
-                <p>No products available</p>
+                <p>No products</p>
               )}
             </div>
           )}

@@ -89,12 +89,12 @@ export default class LoginForm extends React.Component {
                 <form onSubmit={this.onSubmitRegister}>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="firstName">First name</label>
+                    <label className="form-label" htmlFor="firstName">Name</label>
                     <input type="text" id="firstName" name="firstName" className="form-control" onChange={this.onChangeHandler}/>
                   </div>
 
                   <div className="form-outline mb-4">
-                    <label className="form-label" htmlFor="lastName">Last name</label>
+                    <label className="form-label" htmlFor="lastName">Surname</label>
                     <input type="text" id="lastName" name="lastName" className="form-control" onChange={this.onChangeHandler}/>
                   </div>
 
