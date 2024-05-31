@@ -8,8 +8,14 @@ function CodePanel(props) {
         window.scrollTo(0, 0);
     }, []);
 
-    const submit = () =>{
+    const submit = () => {
         props.submit(code);
+    }
+
+    const submitEnter = (event) => {
+        if(event.key === 'Enter'){
+            props.submit(code);
+        }
     }
 
     const handleInputChange = (event) => {
@@ -20,7 +26,7 @@ function CodePanel(props) {
         <form className="d-flex flex-column align-items-center mt-3">
             <p>Please enter the code sent to your email</p>
             <input type="text" className="form-control" style={{width: "100px"}} value={code} onChange={handleInputChange} />
-            <button type="submit" className="btn btn-success mt-2" onClick={submit}>Enter</button>
+            <button type="submit" className="btn btn-success mt-2" onKeyDown={submitEnter} onClick={submit}>Enter</button>
         </form>
     );
 }

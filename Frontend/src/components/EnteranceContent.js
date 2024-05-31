@@ -47,7 +47,7 @@ export default class EnteranceContent extends Component {
           <button className='btn btn-primary mt-1 mb-1 mx-1' onClick={this.props.login}>Login</button>
         </header>
 
-        <main style={{marginLeft: '400px', marginRight:'400px', marginTop: '45px'}}>
+        <main style={{marginLeft: '400px', marginRight:'400px', marginTop: '45px', marginBottom: '60px'}}>
           <div id="imageContainer"></div>
           <div className="container mt-1 mb-5">
             <h2 className='mb-4'>All Products</h2>

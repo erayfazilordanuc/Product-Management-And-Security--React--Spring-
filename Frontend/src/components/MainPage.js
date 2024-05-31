@@ -249,10 +249,14 @@ export default class MainPage extends React.Component {
       this.setState({allDefaultData: data});
     }
 
-    if(sortOrder === 'increasingCost') {
+    if(sortOrder === 'increasingPrice') {
       sortedData.sort((a, b) => a.price - b.price);
-    }else if(sortOrder === 'decreasingCost') {
+    }else if(sortOrder === 'decreasingPrice') {
       sortedData.sort((a, b) => b.price - a.price);
+    }else if(sortOrder === 'aToZ') {
+      sortedData.sort((a, b) => a.brand.localeCompare(b.brand));
+    }else if(sortOrder === 'zToA') {
+      sortedData.sort((a, b) => b.brand.localeCompare(a.brand));
     }else if(sortOrder === 'default') {
       if(document.getElementById('allSearchInput').value === ''){
         sortedData = this.state.allDefaultData; 
@@ -276,10 +280,14 @@ export default class MainPage extends React.Component {
       this.setState({myDefaultData: userProductsData});
     }
 
-    if(mySortOrder === 'increasingCost') {
+    if(mySortOrder === 'increasingPrice') {
       sortedData.sort((a, b) => a.price - b.price);
-    }else if(mySortOrder === 'decreasingCost') {
+    }else if(mySortOrder === 'decreasingPrice') {
       sortedData.sort((a, b) => b.price - a.price);
+    }else if(mySortOrder === 'aToZ') {
+      sortedData.sort((a, b) => a.brand.localeCompare(b.brand));
+    }else if(mySortOrder === 'zToA') {
+      sortedData.sort((a, b) => b.brand.localeCompare(a.brand));
     }else if(mySortOrder === 'default') {
       if(document.getElementById('mySearchInput').value === ''){
         sortedData = this.state.myDefaultData; 
@@ -293,6 +301,10 @@ export default class MainPage extends React.Component {
     }
 
     this.setState({userProductsData: sortedData});
+  }
+
+  alphabeticSort = (dataToSort) => {
+    
   }
 
   accountInfo = () => {
@@ -349,6 +361,7 @@ export default class MainPage extends React.Component {
     if(this.state.myDefaultData){
       this.setState({userProductsData: this.state.myDefaultData});
     }
+    document.getElementById('mySortTable').value = 'default';
     document.getElementById('mySearchInput').value = '';
   }
 
@@ -356,6 +369,7 @@ export default class MainPage extends React.Component {
     if(this.state.allDefaultData){
       this.setState({data: this.state.allDefaultData});
     }
+    document.getElementById('allSortTable').value = 'default';
     document.getElementById('allSearchInput').value = '';
   }
 
@@ -387,6 +401,7 @@ export default class MainPage extends React.Component {
                   <p>Username : {this.state.accountInfo.username}</p>
                   <p>Email : {this.state.accountInfo.email}</p>
                   <p>Id : {this.state.accountInfo.id}</p>
+                  <button className='btn btn-secondary mb-3' onClick={() => this.setState({accountInfoPanel: false})}>Close</button>
                 </div>
               </div>
             </div>
@@ -405,14 +420,14 @@ export default class MainPage extends React.Component {
                       <input onKeyDown={this.mySearch} id="mySearchInput" style={{width: "400px"}} className="form-control" placeholder="Type what you want and press Enter to search..."></input>
                       <button className='btn btn-success mx-1' onClick={this.clearMySearch}>Clear</button>
                   </div>
-                  <div className='col-sm-2'>
+                  <div className='col-sm-3'>
                     <label>Sort by</label>
-                      <select onChange={this.mySortChange}className='form-select mt-1'>
+                      <select id='mySortTable' onChange={this.mySortChange}className='form-select mt-1'>
                           <option value='default'>Default</option>
-                          <option value='increasingCost'>Increasing cost</option>
-                          <option value='decreasingCost'>Decreasing cost</option>
-                          {/* <option value='aToZ'>Alphabetical</option>
-                          <option value='zToA'>Reverse Alphabetical</option> */}
+                          <option value='increasingPrice'>Increasing price</option>
+                          <option value='decreasingPrice'>Decreasing price</option>
+                          <option value='aToZ'>Alphabetical</option>
+                          <option value='zToA'>Reverse Alphabetical</option>
                       </select>
                   </div>
                 </div>
@@ -518,12 +533,12 @@ export default class MainPage extends React.Component {
                   </div>
                 <div className='col-sm-3'>
                   <label>Sort by</label>
-                    <select onChange={this.sortChange}className='form-select mt-1'>
+                    <select id='allSortTable' onChange={this.sortChange}className='form-select mt-1'>
                         <option value='default'>Default</option>
-                        <option value='increasingCost'>Increasing cost</option>
-                        <option value='decreasingCost'>Decreasing cost</option>
-                        {/* <option value='aToZ'>Alphabetical</option>
-                        <option value='zToA'>Reverse Alphabetical</option> */}
+                        <option value='increasingPrice'>Increasing price</option>
+                        <option value='decreasingPrice'>Decreasing price</option>
+                        <option value='aToZ'>Alphabetical</option>
+                        <option value='zToA'>Reverse Alphabetical</option>
                     </select>
                 </div>
               </div>
