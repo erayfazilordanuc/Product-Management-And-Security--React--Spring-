@@ -381,7 +381,7 @@ export default class MainPage extends React.Component {
     return (
       <div style={{marginLeft: '250px', marginRight:'250px'}}>
         <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <h4 style={{marginLeft: '5px'}}>Product Store</h4>
+          <h4 style={{marginLeft: '5px'}}>Product Management</h4>
           <div>
             <button className='btn btn-light mt-1 mb-1' onClick={this.accountInfo}>Account Info</button>
             <button className='btn btn-danger mt-1 mb-1 mx-2' onClick={this.logout}>Logout</button>

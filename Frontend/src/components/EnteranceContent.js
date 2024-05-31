@@ -43,7 +43,7 @@ export default class EnteranceContent extends Component {
     return (
       <div>
         <header style={{display: 'flex', justifyContent: 'space-between', alignItems: 'center'}}>
-          <h4 style={{textAlign: 'left', marginLeft: '5px'}}>Product Store</h4>
+          <h4 style={{textAlign: 'left', marginLeft: '5px'}}>Product Management</h4>
           <button className='btn btn-primary mt-1 mb-1 mx-1' onClick={this.props.login}>Login</button>
         </header>
 

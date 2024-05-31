@@ -31,7 +31,6 @@ export default class AppContent extends React.Component {
             }
         } else {
             this.setState({ errorMessage: "Invalid verification code." });
-            this.errorMessage = "Invalid verification code.";
         }
     }
 
@@ -56,13 +55,12 @@ export default class AppContent extends React.Component {
                 setAuthHeader(response.data.token);
                 this.setState({ userId: response.data.id });
                 window.location.href = "/main";
-                this.errorMessage = "";
+                this.setState({errorMessage: ""});
             }).catch(
             (error) => {
                 setAuthHeader(null);
 
                 this.setState({ errorMessage: error.response.data.message });
-                this.errorMessage = error.response.data.message;
             }
         );
     }
@@ -82,13 +80,12 @@ export default class AppContent extends React.Component {
                 setAuthHeader(response.data.token);
                 this.setState({ userId: response.data.id });
                 window.location.href = "/main";
-                this.errorMessage = "";
+                this.setState({errorMessage: ""});
             }).catch(
             (error) => {
                 setAuthHeader(null);
                 
                 this.setState({ errorMessage: error.response.data.message });
-                this.errorMessage = error.response.data.message;
             }
         );
     }
@@ -107,7 +104,6 @@ export default class AppContent extends React.Component {
             }).catch(
             (error) => {
                 this.setState({ errorMessage: error.response.data.message });
-                this.errorMessage = error.response.data.message;
             }
         );
     }
@@ -134,7 +130,7 @@ export default class AppContent extends React.Component {
         return (
             <>
             <div>
-                {this.errorMessage && <p style={{ color: 'red', marginTop: '20px' }}>{this.errorMessage}</p>}
+                {this.state.errorMessage && <p style={{ color: 'red', marginTop: '20px' }}>{this.state.errorMessage}</p>}
                 {componentToShow.includes("code") && <CodePanel submit={this.submit} />}
                 {componentToShow.includes("login") && <LoginForm onLogin={this.onLogin} onRegister={this.onRegister} />}
                 {componentToShow.includes("enterance") && <EnteranceContent login={this.login}/>}
