@@ -23,7 +23,7 @@ function CodePanel(props) {
     }
     
     return (
-        <form className="d-flex flex-column align-items-center mt-3">
+        <form className="d-flex flex-column align-items-center mt-3 mb-1">
             <p>Please enter the code sent to your email</p>
             <input type="text" className="form-control" style={{width: "100px"}} value={code} onChange={handleInputChange} />
             <button type="submit" className="btn btn-success mt-2" onKeyDown={submitEnter} onClick={submit}>Enter</button>

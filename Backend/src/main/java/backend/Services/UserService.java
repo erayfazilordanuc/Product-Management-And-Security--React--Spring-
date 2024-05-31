@@ -8,6 +8,7 @@ import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import backend.DTOs.MemberDTO;
+import backend.DTOs.SaveDTO;
 import backend.DTOs.SignUpDTO;
 import backend.DTOs.UserDTO;
 import backend.Entities.User;
@@ -64,8 +65,8 @@ public class UserService { // UserRepo kullanarak user için gerekli işlemleri 
         return userMapper.toUserDto(user);
     }
 
-    public UserDTO getUserInfo(int id){
-        UserDTO dtoToSend = new UserDTO();
+    public SaveDTO getUserInfo(int id){
+        SaveDTO dtoToSend = new SaveDTO();
         User user = userRepo.findById(id).get();
         dtoToSend.setName(user.getName());
         dtoToSend.setSurname(user.getSurname());
@@ -73,6 +74,16 @@ public class UserService { // UserRepo kullanarak user için gerekli işlemleri 
         dtoToSend.setEmail(user.getEmail());
         dtoToSend.setId(id);
         return dtoToSend;
+    }
+
+    public void save(SaveDTO saveDto){
+        User user = userRepo.findById(saveDto.getId()).get();
+        user.setEmail(saveDto.getEmail());
+        user.setName(saveDto.getName());
+        user.setSurname(saveDto.getSurname());
+        user.setUsername(saveDto.getUsername());
+
+        userRepo.save(user);
     }
 
 }

@@ -5,6 +5,7 @@ import ShowPanel from './ShowPanel';
 import AddProductPanel from './AddProductPanel';
 import jwt from 'jsonwebtoken';
 import axios from 'axios';
+import AccountEditPanel from './AccountEditPanel';
 
 export default class MainPage extends React.Component {
   constructor(props) {
@@ -30,9 +31,9 @@ export default class MainPage extends React.Component {
       mySortOrder: 'default',
       allDefaultData: null,
       myDefaultData: null,
-      userInfo: {},
       myLastDataState: [],
-      allLastDataState: []
+      allLastDataState: [],
+      accountEditPanelState: false
     };
     this.productRefs = {};
   }
@@ -165,6 +166,10 @@ export default class MainPage extends React.Component {
           this.setState({ data: error.response.code });
         }
     });
+  }
+
+  onAccountSave = (userData) => {
+    request('POST', '/user/save', userData);
   }
 
   onAdd = () => {
@@ -308,6 +313,9 @@ export default class MainPage extends React.Component {
   }
 
   accountInfo = () => {
+    if(this.state.accountInfoPanel){
+      this.setState({accountEditPanelState: false});
+    }
     this.setState(prevState => ({ accountInfoPanel: !prevState.accountInfoPanel }), () => {
       if(this.state.accountInfoPanel){
         window.scroll(0, 0);
@@ -392,7 +400,7 @@ export default class MainPage extends React.Component {
           {/* Account Info */}
           <span>ㅤㅤㅤㅤㅤㅤ</span>
           {this.state.accountInfoPanel && (
-            <div className='border' style={{marginBottom: '-30px', marginTop: '30px', backgroundColor: '#f6f6f6', width: '50%', marginLeft: 'auto', marginRight: 'auto'}}>
+            <div className='border' style={{marginBottom: '-30px', marginTop: '30px', backgroundColor: '#f6f6f6', width: '70%', marginLeft: 'auto', marginRight: 'auto'}}>
               <h5 className="mt-3">Account</h5>
               <div className='mt-3'>
                 <div>
@@ -401,7 +409,13 @@ export default class MainPage extends React.Component {
                   <p>Username : {this.state.accountInfo.username}</p>
                   <p>Email : {this.state.accountInfo.email}</p>
                   <p>Id : {this.state.accountInfo.id}</p>
-                  <button className='btn btn-secondary mb-3' onClick={() => this.setState({accountInfoPanel: false})}>Close</button>
+                  <button className='btn btn-secondary mb-3 mx-1' onClick={() => this.setState({accountInfoPanel: false, accountEditPanelState: false})}>Close</button>
+                  <button className='btn btn-primary mb-3' onClick={() => this.setState({accountEditPanelState: true})}>Edit</button>
+                  {this.state.accountEditPanelState && (<AccountEditPanel
+                    dataToEdit={this.state.accountInfo}
+                    onCancel={() => this.setState({accountEditPanelState: false})}
+                    onSave={this.onAccountSave}
+                  />)}
                 </div>
               </div>
             </div>

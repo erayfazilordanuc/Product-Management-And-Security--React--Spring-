@@ -13,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import backend.DTOs.MemberDTO;
+import backend.DTOs.SaveDTO;
 import backend.DTOs.SignUpDTO;
 import backend.DTOs.UserDTO;
 import backend.Entities.Mail;
@@ -91,8 +92,13 @@ public class UserController { // Login ve register aşamalarını yöneten contr
     }
 
     @PostMapping("/getUserInfo")
-    public ResponseEntity<UserDTO> getUserInfo(@RequestBody int id) {
+    public ResponseEntity<SaveDTO> getUserInfo(@RequestBody int id) {
         return ResponseEntity.ok(userService.getUserInfo(id));
+    }
+
+    @PostMapping("/save")
+    public void saveUser(@RequestBody SaveDTO saveDto){
+        userService.save(saveDto);
     }
 
 }

@@ -22,7 +22,7 @@ export default class AppContent extends React.Component {
     };
 
     submit = (code) => { // kod doğrulama işlemi
-        if (code == this.state.authCode) {
+        if (code == this.state.authCode) { // muhtemelen burada auth code hemen atanmadığı için localhost/? adresine yönlendirme yapıyor
             if (this.state.registerData) {
                 const { name, surname, username, password, email } = this.state.registerData;
                 this.registerRequest(name, surname, username, password, email);
