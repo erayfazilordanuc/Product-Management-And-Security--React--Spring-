@@ -514,7 +514,7 @@ export default class MainPage extends React.Component {
               </div>
             )}
             <div>
-              <button id='addButton' className='btn btn-success' onClick={this.onAdd}>
+              <button id='addButton' className={`btn ${this.state.addingProduct ? 'btn-secondary' : 'btn-success'}`} onClick={this.onAdd}>
                 Add Product
               </button>
               {this.state.addingProduct && (
